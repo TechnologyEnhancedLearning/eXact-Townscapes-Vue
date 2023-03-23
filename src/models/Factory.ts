@@ -132,7 +132,6 @@ export default class Factory {
     }
 
     if (fileAsset["@imagealt"]) {
-      alert ("found alt text");
       stageAsset.altText = fileAsset["@imagealt"];
     }
 
