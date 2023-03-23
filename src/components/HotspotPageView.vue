@@ -7,7 +7,7 @@
       <div class="sr-only">{{ page.name }}</div>
 
       <div class="page-image-container">
-        <img :src="page.backgroundImgSrc" class="page-image">
+        <img :src="page.backgroundImgSrc" class="page-image" alt="" >
       </div>
 
       <ul class="circle-links">
