@@ -9,14 +9,9 @@
       >
         <header class="modal__header" id="modalTitle">
           <slot name="header"> </slot>
-          <button
-            type="button"
-            class="btn-close"
-            @click="close"
-            aria-label="Close modal"
-          >
-            <span>x</span>
-          </button>
+         <button id="closeModal" class="hide" @click="close()" @keydown.shift.tab.capture.prevent.stop>
+              <svg-icon class="icon close spin" icon="close" color1="#000" color2="#fff" color3="#000"></svg-icon>
+            </button>
         </header>
 
         <div class="modal__body" id="modalDescription">
@@ -24,14 +19,7 @@
         </div>
         <div class="modal__footer">
           <slot name="footer">
-            <button
-              type="button"
-              class=""
-              @click="close"
-              aria-label="Close modal"
-            >
-              Close
-            </button>
+
           </slot>
         </div>
       </div>
@@ -40,9 +28,13 @@
 </template>
 
 <script>
+import SvgIcon from "./SvgIcon.vue";
 export default {
   name: "ModalView",
   emits: ["close"],
+  components: {
+    SvgIcon
+  },
   props: {
     modalSize: {
       type: String,
@@ -71,7 +63,7 @@ export default {
 .modal__wrapper {
   display: table-cell;
   vertical-align: middle;
-  top: 2%;
+  // top: 2%;
 }
 
 .modal__container {
@@ -109,12 +101,14 @@ export default {
   border-bottom: 1px dotted #000;
   color: #fff;
   font-weight: 600;
+  display: flex;
   justify-content: space-between;
+  align-items: center;
   background-color: #444;
   font-size: 1.5em;
   button {
     font-size: 1.2rem;
-    margin-top: -10px;
+    // margin-top: -10px;
     color: #000;
     span {
       padding-bottom: 2px;
@@ -124,7 +118,7 @@ export default {
 }
 
 .modal__footer {
-  border-top: 1px dotted #000;
+  // border-top: 1px dotted #000;
   flex-direction: column;
   button {
     height: 2.5em;
@@ -144,5 +138,20 @@ export default {
   // background-color: #ccc;
   font-size: 0.8em;
   padding: 0.4em;
+}
+
+#closeModal {
+  outline:none;
+  &:focus-visible {
+
+    svg {
+      outline: $keyboard-focus-width $keyboard-focus-style $keyboard-focus-color-inverted;
+    }
+  }
+
+  svg {
+    width: 2.5vw;
+
+  }
 }
 </style>
