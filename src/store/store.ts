@@ -135,7 +135,7 @@ export const store = createStore<State>({
       config.stage.footerHeight = fileConfig.root["@footerheight"];
 
       const info = new Information();
-      info.title = "Information";
+      info.title = fileConfig.root["@informationbuttontext"];
       if (fileConfig.root.information.contents) {
         info.text = fileConfig.root.information.contents;
       }
