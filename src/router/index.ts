@@ -25,6 +25,12 @@ const routes: Array<RouteRecordRaw> = [
     component: SmallLinkListView
   },
   {
+    path: "/page/overview",
+    name: "InformationPage",
+    props: true,
+    component: OverviewPage
+  },
+  {
     path: "/page/:pageName/overview",
     name: "OverviewPage",
     props: true,
