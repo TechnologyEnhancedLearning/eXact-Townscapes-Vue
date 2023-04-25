@@ -8,13 +8,7 @@
         <button class="switch-view" v-if="!sessionConfig.editorOn" @click="setDetailedViewMode()">
           <div>
             <span class="sr-only">Switch to standard view</span>
-            <svg-icon style="width: 3em;"
-              icon="accessiblityOff"
-              ariaLabel="Standard view"
-              :color1="sessionConfig.stage.scrollButtonColour">
-              </svg-icon>
-
-              <div>Standard View</div>
+            <div>Standard View</div>
           </div>
         </button>
       </div>
