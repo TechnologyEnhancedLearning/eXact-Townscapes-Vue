@@ -46,7 +46,7 @@
               :color1="sessionConfig.stage.scrollButtonColour">
               </svg-icon>
       </button>
-       <button style="padding: 0.5em"  v-if="sessionConfig.info" @click="setVisibleModal('information')">Information</button>
+       <button style="padding: 0.5em"  v-if="sessionConfig.info" @click="setVisibleModal('information')">{{ sessionConfig.info.title}}</button>
       <button style="padding: 0.5em" v-if="sessionConfig.editorOn !== true" @click="setVisibleModal('assetData')">Show Asset Info</button>
       <div v-if="sessionConfig.editorOn === true" class="xy-position">{{xPos}}%, {{yPos}}%
       </div>
