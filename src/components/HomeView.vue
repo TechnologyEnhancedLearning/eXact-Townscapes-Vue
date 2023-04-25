@@ -46,7 +46,8 @@
               :color1="sessionConfig.stage.scrollButtonColour">
               </svg-icon>
       </button>
-      <button style="padding: 0.5em" v-if="sessionConfig.editorOn === true" @click="setVisibleModal('assetData')">Show Asset Info</button>
+       <button style="padding: 0.5em"  @click="setVisibleModal('information')">Information</button>
+      <button style="padding: 0.5em" v-if="sessionConfig.editorOn !== true" @click="setVisibleModal('assetData')">Show Asset Info</button>
       <div v-if="sessionConfig.editorOn === true" class="xy-position">{{xPos}}%, {{yPos}}%
       </div>
     </div>
@@ -158,6 +159,22 @@
     </modal-view>
   </transition>
 
+   <transition name="slide">
+    <modal-view v-if="visibleModal == 'information'" @close="setVisibleModal('')">
+      <template v-slot:header>
+        <div>
+        <h2>{{ sessionConfig.info.title }}</h2>
+        </div>
+      </template>
+
+      <template v-slot:body>
+
+       <span v-html= "sessionConfig.info.text"></span>
+
+      </template>
+    </modal-view>
+  </transition>
+
 </template>
 
 <script lang="ts">
@@ -172,6 +189,7 @@ import StageTween from "@/models/StageTween";
 import { gsap } from "gsap";
 import SmallView from "./SmallView.vue";
 import SvgIcon from "./SvgIcon.vue";
+import Information from "@/models/Information";
 
 export default defineComponent({
   name: "HomeView",
