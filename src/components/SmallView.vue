@@ -6,10 +6,8 @@
     <div class="sm-view-wrapper">
       <div class="control-panel">
         <button class="switch-view" v-if="!sessionConfig.editorOn" @click="setDetailedViewMode()">
-          <div>
-            <span class="sr-only">Switch to standard view</span>
-            <div>Standard View</div>
-          </div>
+          <span class="sr-only">Switch to standard view</span>
+          <span class="" aria-hidden="true">Standard view </span>
         </button>
       </div>
       <ul style="padding: 0;">
@@ -79,6 +77,10 @@ export default defineComponent({
 
 .control-panel {
   margin-top: 1em;
+  button {
+    border-radius:5px;
+    padding:1rem;
+  }
 }
 
 @media only screen and (max-width: 1024px) {
