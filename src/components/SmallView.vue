@@ -17,7 +17,7 @@
               <div>Standard View</div>
           </div>
         </button>
-        <button style="padding: 0.5em"  @click="setVisibleModal('information')">Information</button>
+        <button style="padding: 0.5em"  @click="$router.push('/page/information')">{{ sessionConfig.info.title }}</button>
       </div>
       <ul style="padding: 0;">
 
