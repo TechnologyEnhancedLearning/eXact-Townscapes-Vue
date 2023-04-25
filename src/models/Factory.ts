@@ -88,8 +88,8 @@ export default class Factory {
     stageBackground.height = fileAsset["@height"];
     stageBackground.z = fileAsset["@zindex"];
 
-    if (fileAsset["@imageAlt"]) {
-      stageBackground.altText = fileAsset["@imageAlt"];
+    if (fileAsset["@imagealt"]) {
+      stageBackground.altText = fileAsset["@imagealt"];
     }
 
     fileAsset.components.forEach((fa: any) => {
@@ -110,6 +110,7 @@ export default class Factory {
 
   public static createStageAsset (fileAsset: any): StageAsset {
     const stageAsset = new StageAsset();
+    console.log(fileAsset);
     const geometry = fileAsset["@geometry"];
 
     if (geometry && geometry !== "") {
@@ -130,8 +131,8 @@ export default class Factory {
       stageAsset.linkIdentifier = encodeURI(fileAsset["@hotspotpagename"].toLowerCase().replaceAll(" ", "-"));
     }
 
-    if (fileAsset["@imageAlt"]) {
-      stageAsset.altText = fileAsset["@imageAlt"];
+    if (fileAsset["@imagealt"]) {
+      stageAsset.altText = fileAsset["@imagealt"];
     }
 
     stageAsset.timeline = new StageTimeline();
