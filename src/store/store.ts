@@ -5,6 +5,7 @@ import { InjectionKey } from "vue";
 import { createStore, Store } from "vuex";
 import HotspotPage from "@/models/HotspotPage";
 import Link from "@/models/Link";
+import Information from "@/models/Information";
 export interface State {
   loadingStatus: string;
   sessionConfig: SessionConfig;
@@ -132,6 +133,13 @@ export const store = createStore<State>({
       //this.dispatch("setStageLeftPosition", "-20%");
       config.stage.footerColor = fileConfig.root["@footerbackgroundcolor"];
       config.stage.footerHeight = fileConfig.root["@footerheight"];
+
+      const info = new Information();
+      info.title = "Information";
+      if (fileConfig.root.information.contents) {
+        info.text = fileConfig.root.information.contents;
+      }
+      config.info = info;
 
       const l = new Link();
       l.text = "Overview";
