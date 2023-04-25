@@ -17,8 +17,11 @@
               <div>Standard View</div>
           </div>
         </button>
+        <button style="padding: 0.5em"  @click="setVisibleModal('information')">Information</button>
       </div>
       <ul style="padding: 0;">
+
+
         <!-- hotspot assets only -->
         <li v-for="a in sessionConfig.assets.filter((x: any) => x.src && x.src.trim !== '' &&  x.linkIdentifier && x.linkIdentifier.trim !== '')" :key="a">
 
