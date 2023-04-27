@@ -22,7 +22,7 @@ a, label {
   color: $txt-color;
 }
 
-a { 
+a {
   text-decoration: none;
   &:hover {
     color: lighten($txt-color, 20);
@@ -93,14 +93,14 @@ button:-webkit-details-marker {
     .control-panel {
       margin-left: 0.5em;
     }
-  
+
     &>ul {
       list-style: none;
       li {
         border: 1px dashed #333;
         border-width: 0 0 1px 0;
         padding: 0.5em 0;
-  
+
         .icon {
             margin: 0.5em 1.3em 0.5em 0.5em;
             width: 3vw;
@@ -109,13 +109,13 @@ button:-webkit-details-marker {
             }
           }
       }
-  
+
       li:last-of-type {
          border: none;
       }
     }
   }
-  
+
 }
 
 .display-none#containerWrapper, .display-none#hotspotPageView, .display-none#smallHotspotPageView, .display-none#smallView, .display-none#smallLinkListView {
@@ -138,7 +138,7 @@ button:-webkit-details-marker {
   .sm-view {
     display: none;
   }
-  
+
   .display#smallView, .display#smallHotspotPageView, .display#smallLinkListView {
     display: block;
 
@@ -147,7 +147,7 @@ button:-webkit-details-marker {
       padding: 0;
     }
     .icon {
-     
+
       width: 50px;
     }
   }
@@ -173,10 +173,10 @@ a[target=_blank]::after {
 
   .breadcrumbs {
     a, a:visited {
-      color: $breadcrumb-link-color; 
+      color: $breadcrumb-link-color;
     }
   }
- 
+
 }
 
 button.hide {
@@ -199,6 +199,12 @@ button.hide {
   }
 }
 
+button.hide.controlBtn {
+  &:hover {
+    background: #ffeb3b;
+  }
+}
+
 
 .scroll-button {
   &:focus {
@@ -207,7 +213,7 @@ button.hide {
 }
 
 .linkText a {
-  
+
   &:focus {
     outline: $keyboard-focus-width $keyboard-focus-style $keyboard-focus-color;
   }
@@ -244,7 +250,7 @@ a.hotspot {
       transition: all 0.4s ease-in-out;
       transform: scale(1.2);
     }
-    
+
   }
 }
 
@@ -252,9 +258,9 @@ a.hotspot {
   ::v-deep a {
     text-decoration: underline;
     &:focus {
-      
+
       outline: $keyboard-focus-width $keyboard-focus-style $keyboard-focus-color;
-      
+
     }
     &:active {
       outline: none;
@@ -281,13 +287,13 @@ a.hotspot {
       }
 
     }
-    
+
   }
 }
 .small-view-link {
-  display: flex; 
-  flex-flow: row nowrap; 
-  justify-content: flex-start; 
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
   align-items: center;
 }
 
