@@ -45,6 +45,12 @@
       </g>
     </svg>
 
+    <svg v-if="icon === 'home'" tabindex="-1" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" height="32px" id="Layer_1" style="enable-background:new 0 0 16 16;"  viewBox="0 0 16 16" width="32px" xml:space="preserve">
+      <g>
+      <path :style="{ fill: color2 }" d="M 15.45,7 C 13.284907,4.8667114 11.15027,2.7031192 9,0.555 8.727,0.297 8.477,0 8,0 7.523,0 7.273,0.297 7,0.555 L 0.55,7 C 0.238,7.325 0,7.562 0,8 0,8.563 0.432,9 1,9 h 1 v 7 H 6 V 9.4958678 c 2.2692475,-0.01328 1.7106562,-0.005 4,0 V 16 c 1.137173,0.03816 3.777795,0.0032 4,0.0041 V 9 h 1 C 15.568,9 16,8.563 16,8 16,7.562 15.762,7.325 15.45,7 Z"/>
+      </g>
+    </svg>
+
     <svg v-if="icon === 'accessiblityOff'" tabindex="-1" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 299.58 299.58" xml:space="preserve">
       <g>
         <circle :style="{ fill: color1 }" cx="157.22" cy="34.9" r="34.9"/>
