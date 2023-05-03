@@ -293,6 +293,8 @@ export default defineComponent({
   display: flex;
   justify-content: center; /*centers items on the line (the x-axis by default)*/
   align-items: center; /*centers items on the cross-axis (y by default)*/
+
+  height:100%;
 }
 
 .modal__container {
@@ -302,15 +304,17 @@ export default defineComponent({
   background: transparent;
   overflow-x: auto;
 
-  &.small {
-    width: 25%;
-    height: 90%;
-  }
 
-  &.large {
-    width: 96vw;
-    height: 96vh;
-  }
+  //&.small {
+    //width: 25%;
+    //height: 90%;
+  //}
+
+  //&.large {
+    //width: 96vw;
+    //height: 96vh;
+  //}
+  height:100%;
 }
 
 .modal__header {
@@ -356,6 +360,8 @@ export default defineComponent({
   list-style: none;
   margin-top: 0.3em;
   text-align: left;
+  max-height: 60%;
+  overflow-y: auto;
 
   ul {
     padding: 0;
@@ -390,6 +396,7 @@ export default defineComponent({
 .linkText {
   display: block;
   padding: 0.8em;
+  text-decoration:underline;
 }
 
 li.has-accordion {

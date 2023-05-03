@@ -33,8 +33,8 @@
 
     <nav>
         <router-link :to="{ name: 'home' }">
-          <svg-icon class="icon spin" icon="close" :color1="getIconColor1" :color2="getIconColor2" :color3="getIconColor1"></svg-icon>
-          <span class="text">Close</span>
+          <svg-icon class="icon" icon="home" :color1="getIconColor1" :color2="getIconColor2" :color3="getIconColor1"></svg-icon>
+          <span class="text">Home</span>
         </router-link>
     </nav>
 
@@ -237,7 +237,7 @@ export default defineComponent({
     }
 
     .text {
-
+      color: #fff;
       font-weight: bold;
 
     }

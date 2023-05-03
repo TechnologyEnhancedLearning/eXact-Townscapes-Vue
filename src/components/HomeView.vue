@@ -4,38 +4,39 @@
   <div id="containerWrapper" :class="{ 'display-none': viewMode !== 'normal', 'editor-on': sessionConfig.editorOn === true  }" >
 
     <div class="stage-control-panel">
-
-      <button @click="stopStartAnimations()" class="hide svg-btn">
+      <button v-if="!sessionConfig.editorOn" @click="setSimpleViewMode()" class="hide controlBtn">
+        <span class="sr-only">Switch to accessible view</span>
+        <span class=""
+              aria-hidden="true"
+              >Accessible view
+              </span>
+      </button>
+      <button @click="stopStartAnimations()" class="controlBtn hide">
         <span class="sr-only">Toggle animations on and off</span>
-        <svg-icon v-if="animationsExist && animationsEnabled === true"
-                icon="stopAnimations"
+        <span v-if="animationsExist && animationsEnabled === true"
                 aria-hidden="true"
-                :color1="sessionConfig.stage.scrollButtonColour">
-                </svg-icon>
+                >Stop animations
+                </span>
 
-        <svg-icon v-if="animationsExist && animationsEnabled === false"
-                icon="startAnimations"
+        <span v-if="animationsExist && animationsEnabled === false"
                 aria-hidden="true"
-                :color1="sessionConfig.stage.scrollButtonColour">
-                </svg-icon>
+                >Start animations
+                </span>
       </button>
 
       <button v-if="!sessionConfig.editorOn"
               @click="toggleHotspotIndicator()"
-              class="hide svg-btn">
+              class="hide controlBtn">
         <span class="sr-only">Toggle hotspot indicator on and off</span>
-        <svg-icon v-if="hotspotIndicatorsEnabled === true"
-                icon="hideHotspots"
+        <span v-if="hotspotIndicatorsEnabled === true"
                 aria-hidden="true"
-                :color1="sessionConfig.stage.scrollButtonColour">
-                </svg-icon>
+                >Hide selectable areas
+                </span>
 
-        <svg-icon v-if="hotspotIndicatorsEnabled === false"
-                icon="showHotspots"
+        <span v-if="hotspotIndicatorsEnabled === false"
                 aria-hidden="true"
-                :color1="sessionConfig.stage.scrollButtonColour"
-                :color2="sessionConfig.stage.scrollButtonStrokeColour">
-                </svg-icon>
+                >Show selectable areas
+                </span>
       </button>
 
       <button v-if="!sessionConfig.editorOn" @click="setSimpleViewMode()" class="hide svg-btn">
@@ -558,8 +559,10 @@ export default defineComponent({
     z-index: 9999;
     position: relative;
 
-    .svg-btn {
-      width: 2%;
+    .controlBtn {
+      background-color:#fff;
+      border-radius:5px;
+      padding:1rem;
     }
   }
 

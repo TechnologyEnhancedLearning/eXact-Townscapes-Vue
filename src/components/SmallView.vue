@@ -6,16 +6,8 @@
     <div class="sm-view-wrapper">
       <div class="control-panel">
         <button class="switch-view" v-if="!sessionConfig.editorOn" @click="setDetailedViewMode()">
-          <div>
-            <span class="sr-only">Switch to standard view</span>
-            <svg-icon style="width: 3em;"
-              icon="accessiblityOff"
-              ariaLabel="Standard view"
-              :color1="sessionConfig.stage.scrollButtonColour">
-              </svg-icon>
-
-              <div>Standard View</div>
-          </div>
+          <span class="sr-only">Switch to standard view</span>
+          <span class="" aria-hidden="true">Standard view </span>
         </button>
         <button style="padding: 0.5em"  @click="$router.push('/page/information')">{{ sessionConfig.info.title }}</button>
       </div>
@@ -88,6 +80,10 @@ export default defineComponent({
 
 .control-panel {
   margin-top: 1em;
+  button {
+    border-radius:5px;
+    padding:1rem;
+  }
 }
 
 @media only screen and (max-width: 1024px) {
