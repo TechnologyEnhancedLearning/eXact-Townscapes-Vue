@@ -136,8 +136,8 @@ export const store = createStore<State>({
 
       const info = new Information();
       info.title = fileConfig.root["@informationbuttontext"];
-      if (fileConfig.root.information.contents) {
-        info.text = fileConfig.root.information.contents;
+      if (fileConfig.root.information) {
+        info.text = fileConfig.root.information;
       }
       config.info = info;
 
