@@ -39,6 +39,13 @@
                 </span>
       </button>
 
+      <button
+            class="hide controlBtn"
+            v-if="sessionConfig.info"
+            @click="setVisibleModal('information')">
+            {{ sessionConfig.info.title}}
+      </button>
+
       <button v-if="!sessionConfig.editorOn" @click="setSimpleViewMode()" class="hide svg-btn">
         <span class="sr-only">Switch to accessible view</span>
         <svg-icon class=""
@@ -47,7 +54,7 @@
               :color1="sessionConfig.stage.scrollButtonColour">
               </svg-icon>
       </button>
-       <button style="padding: 0.5em"  v-if="sessionConfig.info" @click="setVisibleModal('information')">{{ sessionConfig.info.title}}</button>
+
       <button style="padding: 0.5em" v-if="sessionConfig.editorOn !== true" @click="setVisibleModal('assetData')">Show Asset Info</button>
       <div v-if="sessionConfig.editorOn === true" class="xy-position">{{xPos}}%, {{yPos}}%
       </div>
@@ -169,8 +176,9 @@
       </template>
 
       <template v-slot:body>
-
+        <div class="info-modal-contents">
        <span v-html= "sessionConfig.info.text"></span>
+        </div>
 
       </template>
     </modal-view>
@@ -564,6 +572,10 @@ export default defineComponent({
       border-radius:5px;
       padding:1rem;
     }
+  }
+
+  .info-modal-contents a {
+    text-decoration: underline;
   }
 
 }
