@@ -137,7 +137,7 @@ export const store = createStore<State>({
       const info = new Information();
       info.title = fileConfig.root["@informationbuttontext"];
       if (fileConfig.root.information) {
-        info.text = fileConfig.root.information;
+        info.text = fileConfig.root.information.contents;
       }
       config.info = info;
 
@@ -145,7 +145,7 @@ export const store = createStore<State>({
       l.text = "Overview";
       const subLink = new Link();
       subLink.isOverviewLink = true;
-      if (fileConfig.root.overview.contents) {
+      if (fileConfig.root.overview) {
         subLink.text = fileConfig.root.overview.contents;
       }
       l.links.push(subLink);
