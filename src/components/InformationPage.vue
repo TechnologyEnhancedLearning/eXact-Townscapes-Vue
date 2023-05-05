@@ -60,17 +60,7 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-.sm-view-wrapper {
-  margin: 1em 1em;
-}
-/*
-::v-deep  a {
-    text-decoration: underline;
-}
-
-.information-text {
-  color: $txt-color;
-}
-*/
-
+  .sm-view-wrapper {
+    margin: 1em 1em;
+  }
 </style>
