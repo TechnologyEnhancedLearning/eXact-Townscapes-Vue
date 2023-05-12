@@ -126,6 +126,13 @@ export const store = createStore<State>({
       config.stage.width = fileConfig.root["@width"];
       config.stage.backgroundColor = fileConfig.root["@stagebackgroundcolor"];
 
+      config.stage.controlButtonBackgroundColor = fileConfig.root["@controlbuttonbackgroundcolor"];
+      config.stage.controlButtonTextColor = fileConfig.root["@controlbuttontextcolour"];
+      config.stage.controlButtonRolloverTextBackgroundColor = fileConfig.root["@controlbuttonrollovertextbackgroundcolour"];
+      config.stage.controlButtonRolloverTextColor = fileConfig.root["@controlbuttonrollovertextcolour"];
+      config.stage.controlButtonBorderColor = fileConfig.root["@controlbuttonbordercolor"];
+      config.stage.controlButtonBorderWidth = fileConfig.root["@controlbuttonborderwidth"];
+
       // config.stage.leftStartPosition = fileConfig.root["@stagestartposition"];
       // config.stage.leftStartPosition = "-133%";
       this.dispatch("setStageLeftPosition", fileConfig.root["@stagestartposition"]);

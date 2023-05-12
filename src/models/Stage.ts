@@ -9,4 +9,10 @@ export default class Stage {
   public scrollButtonColour = "";
   public scrollButtonStrokeColour = "";
   public hotSpotIndicatorColour = "";
+  public controlButtonBackgroundColor = "";
+  public controlButtonTextColor = "";
+  public controlButtonRolloverTextBackgroundColor = "";
+  public controlButtonRolloverTextColor = "";
+  public controlButtonBorderColor = "";
+  public controlButtonBorderWidth = "";
 }

@@ -256,6 +256,39 @@ export default defineComponent({
         gsap.set("#scrollButtonRight", { display: "none", duration: 0 });
       }
     }
+
+    if (this.sessionConfig.stage.controlButtonBackgroundColor !== "") {
+      document.querySelectorAll<HTMLElement>(".controlBtn").forEach(btn => {
+        btn.style.backgroundColor = this.sessionConfig.stage.controlButtonBackgroundColor;
+      });
+    }
+    if (this.sessionConfig.stage.controlButtonTextColor !== "") {
+      document.querySelectorAll<HTMLElement>(".controlBtn").forEach(btn => {
+        btn.style.color = this.sessionConfig.stage.controlButtonTextColor;
+      });
+    }
+    // if (this.sessionConfig.stage.controlButtonRolloverTextBackgroundColor !== "") {
+    //   document.querySelectorAll<HTMLElement>(".controlBtn").forEach(btn => {
+    //     btn.style.backgroundColor = this.sessionConfig.stage.controlButtonRolloverTextBackgroundColor;
+    //   });
+    // }
+    // if (this.sessionConfig.stage.controlButtonRolloverTextColor !== "") {
+    //   document.querySelectorAll<HTMLElement>(".controlBtn").forEach(btn => {
+    //     btn.style.backgroundColor = this.sessionConfig.stage.controlButtonRolloverTextColor;
+    //   });
+    // }
+    if (this.sessionConfig.stage.controlButtonBorderColor !== "") {
+      document.querySelectorAll<HTMLElement>(".controlBtn").forEach(btn => {
+        btn.style.borderStyle = "solid";
+        btn.style.borderColor = this.sessionConfig.stage.controlButtonBorderColor;
+      });
+
+      if (this.sessionConfig.stage.controlButtonBorderWidth !== "0") {
+        document.querySelectorAll<HTMLElement>(".controlBtn").forEach(btn => {
+          btn.style.borderWidth = this.sessionConfig.stage.controlButtonBorderWidth;
+        });
+      }
+    }
   },
   methods: {
     onMoveLeft (a: StageAsset, moveValue: number) {
@@ -535,6 +568,12 @@ export default defineComponent({
     position: relative;
 
     .controlBtn {
+      background-color:#fff;
+      border-radius:5px;
+      padding:1rem;
+    }
+
+    .controlBtnHover {
       background-color:#fff;
       border-radius:5px;
       padding:1rem;
