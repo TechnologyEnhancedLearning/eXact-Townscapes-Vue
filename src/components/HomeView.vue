@@ -183,7 +183,7 @@ export default defineComponent({
       yPos: "0",
       timelines: new Array<gsap.core.Timeline>(),
       smallMoveValue: 0.1,
-      largeMoveValue: 1
+      largeMoveValue: 1,
     };
   },
   computed: {
@@ -254,39 +254,6 @@ export default defineComponent({
       // } else if ((parseInt(this.stageLeftPosition, 10) * -1) >= parseInt(this.sessionConfig.stage.width, 10)) {
       } else if (this.stageLeftPosition === rightMostPosition) {
         gsap.set("#scrollButtonRight", { display: "none", duration: 0 });
-      }
-    }
-
-    if (this.sessionConfig.stage.controlButtonBackgroundColor !== "") {
-      document.querySelectorAll<HTMLElement>(".controlBtn").forEach(btn => {
-        btn.style.backgroundColor = this.sessionConfig.stage.controlButtonBackgroundColor;
-      });
-    }
-    if (this.sessionConfig.stage.controlButtonTextColor !== "") {
-      document.querySelectorAll<HTMLElement>(".controlBtn").forEach(btn => {
-        btn.style.color = this.sessionConfig.stage.controlButtonTextColor;
-      });
-    }
-    // if (this.sessionConfig.stage.controlButtonRolloverTextBackgroundColor !== "") {
-    //   document.querySelectorAll<HTMLElement>(".controlBtn").forEach(btn => {
-    //     btn.style.backgroundColor = this.sessionConfig.stage.controlButtonRolloverTextBackgroundColor;
-    //   });
-    // }
-    // if (this.sessionConfig.stage.controlButtonRolloverTextColor !== "") {
-    //   document.querySelectorAll<HTMLElement>(".controlBtn").forEach(btn => {
-    //     btn.style.backgroundColor = this.sessionConfig.stage.controlButtonRolloverTextColor;
-    //   });
-    // }
-    if (this.sessionConfig.stage.controlButtonBorderColor !== "") {
-      document.querySelectorAll<HTMLElement>(".controlBtn").forEach(btn => {
-        btn.style.borderStyle = "solid";
-        btn.style.borderColor = this.sessionConfig.stage.controlButtonBorderColor;
-      });
-
-      if (this.sessionConfig.stage.controlButtonBorderWidth !== "0") {
-        document.querySelectorAll<HTMLElement>(".controlBtn").forEach(btn => {
-          btn.style.borderWidth = this.sessionConfig.stage.controlButtonBorderWidth;
-        });
       }
     }
   },
@@ -477,6 +444,13 @@ export default defineComponent({
 </script>
 <style lang="scss">
 
+$controlButtonBackgroundColor: v-bind('sessionConfig.stage.controlButtonBackgroundColor');
+$controlButtonTextColor: v-bind('sessionConfig.stage.controlButtonTextColor');
+$controlButtonRolloverBackgroundColor: v-bind('sessionConfig.stage.controlButtonRolloverBackgroundColor');
+$controlButtonRolloverTextColor: v-bind('sessionConfig.stage.controlButtonRolloverTextColor');
+$controlButtonBorderColor: v-bind('sessionConfig.stage.controlButtonBorderColor');
+$controlButtonBorderWidth: v-bind('sessionConfig.stage.controlButtonBorderWidth');
+
 // 1024px
 @media only screen and (min-width: 1024px) {
 
@@ -572,14 +546,23 @@ export default defineComponent({
       border-radius:5px;
       padding:1rem;
     }
-
-    .controlBtnHover {
-      background-color:#fff;
-      border-radius:5px;
-      padding:1rem;
-    }
+    
   }
-
 }
+
+.stage-control-panel {
+    .controlBtn {
+        background-color: $controlButtonBackgroundColor;
+        color: $controlButtonTextColor;
+        border-style: solid;
+        border-width: $controlButtonBorderWidth;
+        border-color: $controlButtonBorderColor;
+      }
+      
+    .hide.controlBtn:hover {
+        background-color: $controlButtonRolloverBackgroundColor;
+        color: $controlButtonRolloverTextColor;
+      }
+  }
 
 </style>

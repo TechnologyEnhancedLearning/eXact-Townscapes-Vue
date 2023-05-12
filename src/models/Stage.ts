@@ -11,7 +11,7 @@ export default class Stage {
   public hotSpotIndicatorColour = "";
   public controlButtonBackgroundColor = "";
   public controlButtonTextColor = "";
-  public controlButtonRolloverTextBackgroundColor = "";
+  public controlButtonRolloverBackgroundColor = "";
   public controlButtonRolloverTextColor = "";
   public controlButtonBorderColor = "";
   public controlButtonBorderWidth = "";

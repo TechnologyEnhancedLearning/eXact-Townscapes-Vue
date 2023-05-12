@@ -126,12 +126,12 @@ export const store = createStore<State>({
       config.stage.width = fileConfig.root["@width"];
       config.stage.backgroundColor = fileConfig.root["@stagebackgroundcolor"];
 
-      config.stage.controlButtonBackgroundColor = fileConfig.root["@controlbuttonbackgroundcolor"];
-      config.stage.controlButtonTextColor = fileConfig.root["@controlbuttontextcolour"];
-      config.stage.controlButtonRolloverTextBackgroundColor = fileConfig.root["@controlbuttonrollovertextbackgroundcolour"];
-      config.stage.controlButtonRolloverTextColor = fileConfig.root["@controlbuttonrollovertextcolour"];
-      config.stage.controlButtonBorderColor = fileConfig.root["@controlbuttonbordercolor"];
-      config.stage.controlButtonBorderWidth = fileConfig.root["@controlbuttonborderwidth"];
+      config.stage.controlButtonBackgroundColor = String(fileConfig.root["@controlbuttonbackgroundcolor"]).length > 0 ? fileConfig.root["@controlbuttonbackgroundcolor"] : "#fff";
+      config.stage.controlButtonTextColor = String(fileConfig.root["@controlbuttontextcolor"]).length > 0 ? fileConfig.root["@controlbuttontextcolor"] : "#000";
+      config.stage.controlButtonRolloverBackgroundColor = String(fileConfig.root["@controlbuttonrolloverbackgroundcolor"]).length > 0 ? fileConfig.root["@controlbuttonrolloverbackgroundcolor"] : "#fff";
+      config.stage.controlButtonRolloverTextColor = String(fileConfig.root["@controlbuttonrollovertextcolor"]).length > 0 ? fileConfig.root["@controlbuttonrollovertextcolor"] : "#000";
+      config.stage.controlButtonBorderColor = String(fileConfig.root["@controlbuttonbordercolor"]).length > 0 ? fileConfig.root["@controlbuttonbordercolor"] : "#fff";
+      config.stage.controlButtonBorderWidth = String(fileConfig.root["@controlbuttonborderwidth"]).length > 0 ? fileConfig.root["@controlbuttonborderwidth"] : "0";
 
       // config.stage.leftStartPosition = fileConfig.root["@stagestartposition"];
       // config.stage.leftStartPosition = "-133%";
