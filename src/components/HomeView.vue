@@ -183,7 +183,7 @@ export default defineComponent({
       yPos: "0",
       timelines: new Array<gsap.core.Timeline>(),
       smallMoveValue: 0.1,
-      largeMoveValue: 1
+      largeMoveValue: 1,
     };
   },
   computed: {
@@ -444,6 +444,13 @@ export default defineComponent({
 </script>
 <style lang="scss">
 
+$controlButtonBackgroundColor: v-bind('sessionConfig.stage.controlButtonBackgroundColor');
+$controlButtonTextColor: v-bind('sessionConfig.stage.controlButtonTextColor');
+$controlButtonRolloverBackgroundColor: v-bind('sessionConfig.stage.controlButtonRolloverBackgroundColor');
+$controlButtonRolloverTextColor: v-bind('sessionConfig.stage.controlButtonRolloverTextColor');
+$controlButtonBorderColor: v-bind('sessionConfig.stage.controlButtonBorderColor');
+$controlButtonBorderWidth: v-bind('sessionConfig.stage.controlButtonBorderWidth');
+
 // 1024px
 @media only screen and (min-width: 1024px) {
 
@@ -539,8 +546,23 @@ export default defineComponent({
       border-radius:5px;
       padding:1rem;
     }
+    
   }
-
 }
+
+.stage-control-panel {
+    .controlBtn {
+        background-color: $controlButtonBackgroundColor;
+        color: $controlButtonTextColor;
+        border-style: solid;
+        border-width: $controlButtonBorderWidth;
+        border-color: $controlButtonBorderColor;
+      }
+      
+    .hide.controlBtn:hover {
+        background-color: $controlButtonRolloverBackgroundColor;
+        color: $controlButtonRolloverTextColor;
+      }
+  }
 
 </style>
