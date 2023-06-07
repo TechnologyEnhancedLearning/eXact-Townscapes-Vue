@@ -55,7 +55,7 @@
               </svg-icon>
       </button>
 
-      <button style="padding: 0.5em" v-if="sessionConfig.editorOn !== true" @click="setVisibleModal('assetData')">Show Asset Info</button>
+      <button style="padding: 0.5em" v-if="sessionConfig.editorOn === true" @click="setVisibleModal('assetData')">Show Asset Info</button>
       <div v-if="sessionConfig.editorOn === true" class="xy-position">{{xPos}}%, {{yPos}}%
       </div>
     </div>
