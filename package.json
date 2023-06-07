@@ -12,7 +12,8 @@
     "gsap": "^3.10.4",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
-    "vuex": "^4.0.0"
+    "vuex": "^4.0.0",
+    "webpack": "^5.86.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.4.0",
@@ -63,7 +64,10 @@
       ],
       "no-trailing-spaces": [
         "error",
-        { "skipBlankLines": true, "ignoreComments": true }
+        {
+          "skipBlankLines": true,
+          "ignoreComments": true
+        }
       ]
     }
   },
