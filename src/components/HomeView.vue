@@ -41,7 +41,7 @@
 
       <button
             class="hide controlBtn"
-            v-if="sessionConfig.info"
+            v-if="sessionConfig.info.title && sessionConfig.info.text"
             @click="setVisibleModal('information')">
             {{ sessionConfig.info.title}}
       </button>
