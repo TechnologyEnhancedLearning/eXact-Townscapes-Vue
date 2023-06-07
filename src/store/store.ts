@@ -103,8 +103,6 @@ export const store = createStore<State>({
       Log.Info("*******************************");
       Log.Info("** Loading configuration for **");
       Log.Info("** elfh townscapes session   **");
-      Log.Info("** created by Chilli-IS      **");
-      Log.Info("** www.chilli-is.co.uk       **");
       Log.Info("*******************************");
       Log.Info(`Template type: ${fileConfig.root["@name"]} `);
       Log.Info(`Template version: ${fileConfig.root["@templateversion"]} `);
