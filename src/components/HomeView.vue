@@ -39,6 +39,21 @@
                 </span>
       </button>
 
+      <button
+            class="hide controlBtn"
+            v-if="sessionConfig.info.title && sessionConfig.info.text"
+            @click="setVisibleModal('information')">
+            {{ sessionConfig.info.title}}
+      </button>
+
+      <button v-if="!sessionConfig.editorOn" @click="setSimpleViewMode()" class="hide svg-btn">
+        <span class="sr-only">Switch to accessible view</span>
+        <svg-icon class=""
+              icon="accessiblityOn"
+              aria-hidden="true"
+              :color1="sessionConfig.stage.scrollButtonColour">
+              </svg-icon>
+      </button>
 
       <button style="padding: 0.5em" v-if="sessionConfig.editorOn === true" @click="setVisibleModal('assetData')">Show Asset Info</button>
       <div v-if="sessionConfig.editorOn === true" class="xy-position">{{xPos}}%, {{yPos}}%
@@ -152,6 +167,23 @@
     </modal-view>
   </transition>
 
+   <transition name="slide">
+    <modal-view v-if="visibleModal == 'information'" @close="setVisibleModal('')">
+      <template v-slot:header>
+        <div>
+        <h2>{{ sessionConfig.info.title }}</h2>
+        </div>
+      </template>
+
+      <template v-slot:body>
+        <div class="info-modal-contents">
+       <span v-html= "sessionConfig.info.text"></span>
+        </div>
+
+      </template>
+    </modal-view>
+  </transition>
+
 </template>
 
 <script lang="ts">
@@ -166,6 +198,7 @@ import StageTween from "@/models/StageTween";
 import { gsap } from "gsap";
 import SmallView from "./SmallView.vue";
 import SvgIcon from "./SvgIcon.vue";
+import Information from "@/models/Information";
 
 export default defineComponent({
   name: "HomeView",
@@ -546,8 +579,15 @@ $controlButtonBorderWidth: v-bind('sessionConfig.stage.controlButtonBorderWidth'
       border-radius:5px;
       padding:1rem;
     }
-    
+
   }
+
+
+
+  .info-modal-contents a {
+    text-decoration: underline;
+  }
+
 }
 
 .stage-control-panel {
@@ -558,7 +598,7 @@ $controlButtonBorderWidth: v-bind('sessionConfig.stage.controlButtonBorderWidth'
         border-width: $controlButtonBorderWidth;
         border-color: $controlButtonBorderColor;
       }
-      
+
     .hide.controlBtn:hover {
         background-color: $controlButtonRolloverBackgroundColor;
         color: $controlButtonRolloverTextColor;

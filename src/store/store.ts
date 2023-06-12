@@ -5,6 +5,7 @@ import { InjectionKey } from "vue";
 import { createStore, Store } from "vuex";
 import HotspotPage from "@/models/HotspotPage";
 import Link from "@/models/Link";
+import Information from "@/models/Information";
 export interface State {
   loadingStatus: string;
   sessionConfig: SessionConfig;
@@ -102,8 +103,6 @@ export const store = createStore<State>({
       Log.Info("*******************************");
       Log.Info("** Loading configuration for **");
       Log.Info("** elfh townscapes session   **");
-      Log.Info("** created by Chilli-IS      **");
-      Log.Info("** www.chilli-is.co.uk       **");
       Log.Info("*******************************");
       Log.Info(`Template type: ${fileConfig.root["@name"]} `);
       Log.Info(`Template version: ${fileConfig.root["@templateversion"]} `);
@@ -140,11 +139,18 @@ export const store = createStore<State>({
       config.stage.footerColor = fileConfig.root["@footerbackgroundcolor"];
       config.stage.footerHeight = fileConfig.root["@footerheight"];
 
+      const info = new Information();
+      info.title = fileConfig.root["@informationbuttontext"];
+      if (fileConfig.root.information) {
+        info.text = fileConfig.root.information.contents;
+      }
+      config.info = info;
+
       const l = new Link();
       l.text = "Overview";
       const subLink = new Link();
       subLink.isOverviewLink = true;
-      if (fileConfig.root.overview.contents) {
+      if (fileConfig.root.overview) {
         subLink.text = fileConfig.root.overview.contents;
       }
       l.links.push(subLink);

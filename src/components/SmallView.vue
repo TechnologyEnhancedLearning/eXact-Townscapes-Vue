@@ -9,8 +9,11 @@
           <span class="sr-only">Switch to standard view</span>
           <span class="" aria-hidden="true">Standard view </span>
         </button>
+        <button @click="$router.push('/page/information')">{{ sessionConfig.info.title }}</button>
       </div>
       <ul style="padding: 0;">
+
+
         <!-- hotspot assets only -->
         <li v-for="a in sessionConfig.assets.filter((x: any) => x.src && x.src.trim !== '' &&  x.linkIdentifier && x.linkIdentifier.trim !== '')" :key="a">
 
@@ -80,6 +83,8 @@ export default defineComponent({
   button {
     border-radius:5px;
     padding:1rem;
+    margin-right: 1rem;
+    border:1px solid #333;
   }
 }
 
@@ -91,7 +96,6 @@ export default defineComponent({
 
 .switch-view {
   background-color: #E8EDEE;
-  border: 1px solid #333;
   >div {
       display: flex;
       flex-flow: row nowrap;
