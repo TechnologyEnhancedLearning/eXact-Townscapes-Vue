@@ -4,6 +4,7 @@ import Link from "./Link";
 export default class HotspotPage {
   public id = "";
   public name = "";
+  public pageTitle = "";
   // RGBA - default black with no opacity
   public backgroundColor = "#fff";
   public iconColor1 = "#000";

@@ -4,7 +4,7 @@
   <main id="hotspotPageView" style="position: absolute; left:0; top:0; width: 100%; height: 100%;" :style="{ backgroundColor: page.backgroundColor }"
         :class="{ 'display-none': viewMode !== 'normal', 'editor-on': sessionConfig.editorOn === true  }" >
     <div style="position: relative; height: 92%;">
-      <div class="sr-only">{{ page.name }}</div>
+      <h1 class="sr-only">{{ page.pageTitle }}</h1>
 
       <div class="page-image-container">
         <img :src="page.backgroundImgSrc" class="page-image" alt="" >

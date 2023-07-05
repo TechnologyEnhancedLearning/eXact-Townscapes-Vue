@@ -63,7 +63,7 @@
     <div id="container"
          :class="{ 'drag-zone': sessionConfig.editorOn === true }"
          :style="{ width: sessionConfig.stage.width, height: sessionConfig.stage.height, backgroundColor: sessionConfig.stage.backgroundColor }">
-      <p class="sr-only">{{ sessionConfig.title }}</p>
+      <h1 class="sr-only">{{ sessionConfig.title }}</h1>
 
       <!-- background -->
       <div v-if="sessionConfig.stageBackground && sessionConfig.stageBackground.id !== ''"
