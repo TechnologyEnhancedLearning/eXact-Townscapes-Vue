@@ -175,6 +175,7 @@ export const store = createStore<State>({
           p.iconColor1 = configPage["@iconcolour"];
           p.iconColor2 = "#fff";
           p.iconColor3 = configPage["@iconcolour"];
+          p.pageTitle = configPage["@description"];
 
           configPage.components.forEach((c: any) => {
             // image inside stage asset
