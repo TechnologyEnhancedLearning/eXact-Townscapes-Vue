@@ -396,7 +396,10 @@ export default defineComponent({
 .linkText {
   display: block;
   padding: 0.8em;
-  text-decoration:underline;
+
+  a {
+    text-decoration:underline;
+  }
 }
 
 li.has-accordion {
