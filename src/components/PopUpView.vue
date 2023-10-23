@@ -364,18 +364,15 @@ export default defineComponent({
   overflow-y: auto;
 
   ul {
-    padding: 0;
+    padding: 16px;
     margin: 0;
   }
 
   li {
-    list-style: none;
     margin-bottom: 0.2em;
     text-align: left;
     font-size: 1em;
-    font-weight: bold;
     position: relative;
-    overflow: hidden;
     span {
       opacity: 1;
     }
@@ -464,7 +461,6 @@ label>input {
 }
 
 .is-overview {
-  font-weight: 600;
   font-size: 1em;
   color: $txt-color;
   padding: 1em;
