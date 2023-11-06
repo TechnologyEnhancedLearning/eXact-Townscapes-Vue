@@ -14,7 +14,9 @@
             </button>
         </header>
 
-        <div class="modal__body" id="modalDescription">
+        <div class="modal__body" id="modalDescription"
+        @keydown.tab.exact="(event) => overviewTab(event)"
+        >
           <slot name="body"> </slot>
         </div>
         <div class="modal__footer">
@@ -27,9 +29,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from "vue";
+import { mapState } from "vuex";
 import SvgIcon from "./SvgIcon.vue";
-export default {
+export default defineComponent({
   name: "ModalView",
   emits: ["close"],
   components: {
@@ -41,12 +45,42 @@ export default {
       default: "large"
     }
   },
+  computed: {
+    ...mapState([
+      "sessionConfig"
+    ])
+  },
+  async mounted () {
+    const closeBtn = document.getElementById("closeModal");
+    closeBtn?.focus();
+  },
   methods: {
     close () {
       this.$emit("close");
+    },
+    overviewTab (event: KeyboardEvent) {
+      // A workaround: I create an HTML element to inject the INFO html in.
+      // Secondly I interact with it as if it was in the DOM to get access to the html elements in it contained
+      const htmlElement = document.createElement("div");
+      htmlElement.innerHTML = this.sessionConfig.info.text;
+
+      const exlinksList = htmlElement.querySelectorAll<HTMLElement>("a");
+      const secondLast = exlinksList[exlinksList.length -1];
+      const isLastLink = secondLast.isEqualNode(event.target as HTMLAnchorElement);
+      
+      if (event.type.toLowerCase() === "keydown" && event.key.toLowerCase() === "tab" && !event.altKey && !event.shiftKey && !event.ctrlKey) {
+        if (event.target) {
+          if (isLastLink) {
+            event.preventDefault(); // you must stop the event, otherwise the focus will move beyond the close button
+            event.stopPropagation();
+            const closeBtn = document.getElementById("closeModal");
+            closeBtn?.focus();
+          }
+        }
+      }
     }
   }
-};
+});
 </script>
 
 <style scoped lang="scss">
