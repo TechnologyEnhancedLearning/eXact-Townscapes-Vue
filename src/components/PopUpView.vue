@@ -1,6 +1,8 @@
 <template>
   <div class="modal" id="popUpViewModal">
-    <div class="modal__wrapper">
+    <div class="modal__wrapper"
+    @keydown.esc="close()"
+    @keydown.tab.exact="(event) => overviewTab(event)">
       <div class="modal__container" role="dialog">
       <header class="modal__header">
             <div>
@@ -13,7 +15,6 @@
       </header>
       <div class="modal__body">
         <div  v-if="link.links.length == 1 && link.links[0].isOverviewLink"
-              @keydown.tab.exact="(event) => overviewTab(event)"
               class="is-overview" v-html="overviewText"
               :style="{ backgroundColor: backgroundColor }">
 
@@ -173,7 +174,7 @@ export default defineComponent({
       if (event.type.toLowerCase() === "keydown" && event.key.toLowerCase() === "tab" && !event.altKey && !event.shiftKey && !event.ctrlKey) {
         if (event.target) {
           const target = event.target as HTMLAnchorElement;
-          if (target.classList.contains("last-link")) {
+          if (target.classList.contains("last-link") || this.link.links.length <= 1) {
             event.preventDefault(); // you must stop the event, otherwise the focus will move beyond the close button
             event.stopPropagation();
             const closeBtn = document.getElementById("closeModal");

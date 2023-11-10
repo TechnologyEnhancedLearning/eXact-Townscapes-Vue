@@ -1,6 +1,9 @@
 <template>
   <div class="modal">
-    <div class="modal__wrapper">
+    <div class="modal__wrapper"
+    @keydown.esc="close()"
+    @keydown.tab.exact="(event) => overviewTab(event)"
+    >
       <div
         :class="['modal__container', modalSize]"
         role="dialog"
@@ -9,14 +12,14 @@
       >
         <header class="modal__header" id="modalTitle">
           <slot name="header"> </slot>
-         <button id="closeModal" class="hide" @click="close()" @keydown.shift.tab.capture.prevent.stop>
+         <button id="closeModal" class="hide" 
+         @click="close()"
+         @keydown.shift.tab.capture.prevent.stop>
               <svg-icon class="icon close spin" icon="close" color1="#000" color2="#fff" color3="#000"></svg-icon>
             </button>
         </header>
 
-        <div class="modal__body" id="modalDescription"
-        @keydown.tab.exact="(event) => overviewTab(event)"
-        >
+        <div class="modal__body" id="modalDescription">
           <slot name="body"> </slot>
         </div>
         <div class="modal__footer">
@@ -64,13 +67,13 @@ export default defineComponent({
       const htmlElement = document.createElement("div");
       htmlElement.innerHTML = this.sessionConfig.info.text;
 
-      const exlinksList = htmlElement.querySelectorAll<HTMLElement>("a");
-      const secondLast = exlinksList[exlinksList.length -1];
+      const linksList = htmlElement.querySelectorAll<HTMLElement>("a");
+      const secondLast = linksList[linksList.length -1];
       const isLastLink = secondLast.isEqualNode(event.target as HTMLAnchorElement);
       
       if (event.type.toLowerCase() === "keydown" && event.key.toLowerCase() === "tab" && !event.altKey && !event.shiftKey && !event.ctrlKey) {
         if (event.target) {
-          if (isLastLink) {
+          if (isLastLink || linksList.length < 1) {
             event.preventDefault(); // you must stop the event, otherwise the focus will move beyond the close button
             event.stopPropagation();
             const closeBtn = document.getElementById("closeModal");
