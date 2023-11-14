@@ -1,6 +1,9 @@
 <template>
   <div class="modal">
-    <div class="modal__wrapper">
+    <div class="modal__wrapper"
+    @keydown.esc="close()"
+    @keydown.tab.exact="(event) => overviewTab(event)"
+    >
       <div
         :class="['modal__container', modalSize]"
         role="dialog"
@@ -9,7 +12,9 @@
       >
         <header class="modal__header" id="modalTitle">
           <slot name="header"> </slot>
-         <button id="closeModal" class="hide" @click="close()" @keydown.shift.tab.capture.prevent.stop>
+         <button id="closeModal" class="hide" 
+         @click="close()"
+         @keydown.shift.tab.capture.prevent.stop>
               <svg-icon class="icon close spin" icon="close" color1="#000" color2="#fff" color3="#000"></svg-icon>
             </button>
         </header>
@@ -27,9 +32,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from "vue";
+import { mapState } from "vuex";
 import SvgIcon from "./SvgIcon.vue";
-export default {
+export default defineComponent({
   name: "ModalView",
   emits: ["close"],
   components: {
@@ -41,12 +48,42 @@ export default {
       default: "large"
     }
   },
+  computed: {
+    ...mapState([
+      "sessionConfig"
+    ])
+  },
+  async mounted () {
+    const closeBtn = document.getElementById("closeModal");
+    closeBtn?.focus();
+  },
   methods: {
     close () {
       this.$emit("close");
+    },
+    overviewTab (event: KeyboardEvent) {
+      // A workaround: I create an HTML element to inject the INFO html in.
+      // Secondly I interact with it as if it was in the DOM to get access to the html elements in it contained
+      const htmlElement = document.createElement("div");
+      htmlElement.innerHTML = this.sessionConfig.info.text;
+
+      const linksList = htmlElement.querySelectorAll<HTMLElement>("a");
+      const secondLast = linksList[linksList.length -1];
+      const isLastLink = secondLast.isEqualNode(event.target as HTMLAnchorElement);
+      
+      if (event.type.toLowerCase() === "keydown" && event.key.toLowerCase() === "tab" && !event.altKey && !event.shiftKey && !event.ctrlKey) {
+        if (event.target) {
+          if (isLastLink || linksList.length < 1) {
+            event.preventDefault(); // you must stop the event, otherwise the focus will move beyond the close button
+            event.stopPropagation();
+            const closeBtn = document.getElementById("closeModal");
+            closeBtn?.focus();
+          }
+        }
+      }
     }
   }
-};
+});
 </script>
 
 <style scoped lang="scss">

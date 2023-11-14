@@ -1,6 +1,8 @@
 <template>
   <div class="modal" id="popUpViewModal">
-    <div class="modal__wrapper">
+    <div class="modal__wrapper"
+    @keydown.esc="close()"
+    @keydown.tab.exact="(event) => overviewTab(event)">
       <div class="modal__container" role="dialog">
       <header class="modal__header">
             <div>
@@ -13,7 +15,6 @@
       </header>
       <div class="modal__body">
         <div  v-if="link.links.length == 1 && link.links[0].isOverviewLink"
-              @keydown.tab.exact="(event) => overviewTab(event)"
               class="is-overview" v-html="overviewText"
               :style="{ backgroundColor: backgroundColor }">
 
@@ -104,7 +105,8 @@ export default defineComponent({
       animsHaveRun: false,
       openAccordions: new Array<string>(),
       backToClose: false,
-      overviewText: ""
+      overviewText: "",
+      linksNumber: 0
     };
   },
   computed: {
@@ -118,6 +120,12 @@ export default defineComponent({
 
     const closeBtn = document.getElementById("closeModal");
     closeBtn?.focus();
+
+    const htmlElement = document.createElement("div");
+    for (const link of this.link.links) {
+      htmlElement.innerHTML = link.text;
+      this.linksNumber += htmlElement.querySelectorAll<HTMLElement>("a").length;
+    }
 
     if (this.link.links.length === 1 && this.link.links[0].isOverviewLink) {
       const content = this.link.links[0].text;
@@ -173,7 +181,7 @@ export default defineComponent({
       if (event.type.toLowerCase() === "keydown" && event.key.toLowerCase() === "tab" && !event.altKey && !event.shiftKey && !event.ctrlKey) {
         if (event.target) {
           const target = event.target as HTMLAnchorElement;
-          if (target.classList.contains("last-link")) {
+          if (target.classList.contains("last-link") || this.linksNumber < 1) {
             event.preventDefault(); // you must stop the event, otherwise the focus will move beyond the close button
             event.stopPropagation();
             const closeBtn = document.getElementById("closeModal");
