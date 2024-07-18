@@ -1,140 +1,193 @@
 <template>
-  <small-view :class="{ 'display': viewMode === 'smallOnly', 'editor-on': sessionConfig.editorOn === true }">
+  <small-view
+    :class="{
+      display: viewMode === 'smallOnly',
+      'editor-on': sessionConfig.editorOn === true,
+    }"
+  >
   </small-view>
-  <div id="containerWrapper" :class="{ 'display-none': viewMode !== 'normal', 'editor-on': sessionConfig.editorOn === true  }" >
-
+  <div
+    id="containerWrapper"
+    :class="{
+      'display-none': viewMode !== 'normal',
+      'editor-on': sessionConfig.editorOn === true,
+    }"
+  >
     <div class="stage-control-panel">
-      <button v-if="!sessionConfig.editorOn" @click="setSimpleViewMode()" class="hide controlBtn">
+      <button
+        v-if="!sessionConfig.editorOn"
+        @click="setSimpleViewMode()"
+        class="hide controlBtn"
+      >
         <span class="sr-only">Switch to accessible view</span>
-        <span class=""
-              aria-hidden="true"
-              >Accessible view
-              </span>
+        <span class="" aria-hidden="true">Accessible view </span>
       </button>
       <button @click="stopStartAnimations()" class="controlBtn hide">
         <span class="sr-only">Toggle animations on and off</span>
-        <span v-if="animationsExist && animationsEnabled === true"
-                aria-hidden="true"
-                >Stop animations
-                </span>
+        <span
+          v-if="animationsExist && animationsEnabled === true"
+          aria-hidden="true"
+          >Stop animations
+        </span>
 
-        <span v-if="animationsExist && animationsEnabled === false"
-                aria-hidden="true"
-                >Start animations
-                </span>
-      </button>
-
-      <button v-if="!sessionConfig.editorOn"
-              @click="toggleHotspotIndicator()"
-              class="hide controlBtn">
-        <span class="sr-only">Toggle hotspot indicator on and off</span>
-        <span v-if="hotspotIndicatorsEnabled === true"
-                aria-hidden="true"
-                >Hide selectable areas
-                </span>
-
-        <span v-if="hotspotIndicatorsEnabled === false"
-                aria-hidden="true"
-                >Show selectable areas
-                </span>
+        <span
+          v-if="animationsExist && animationsEnabled === false"
+          aria-hidden="true"
+          >Start animations
+        </span>
       </button>
 
       <button
-            class="hide controlBtn"
-            v-if="sessionConfig.info.title && sessionConfig.info.text"
-            @click="setVisibleModal('information')">
-            {{ sessionConfig.info.title}}
+        v-if="!sessionConfig.editorOn"
+        @click="toggleHotspotIndicator()"
+        class="hide controlBtn"
+      >
+        <span class="sr-only">Toggle hotspot indicator on and off</span>
+        <span v-if="hotspotIndicatorsEnabled === true" aria-hidden="true"
+          >Hide selectable areas
+        </span>
+
+        <span v-if="hotspotIndicatorsEnabled === false" aria-hidden="true"
+          >Show selectable areas
+        </span>
       </button>
 
-      <button v-if="!sessionConfig.editorOn" @click="setSimpleViewMode()" class="hide svg-btn">
+      <button
+        class="hide controlBtn"
+        v-if="sessionConfig.info.title && sessionConfig.info.text"
+        @click="setVisibleModal('information')"
+      >
+        {{ sessionConfig.info.title }}
+      </button>
+
+      <button
+        v-if="!sessionConfig.editorOn"
+        @click="setSimpleViewMode()"
+        class="hide svg-btn"
+      >
         <span class="sr-only">Switch to accessible view</span>
-        <svg-icon class=""
-              icon="accessiblityOn"
-              aria-hidden="true"
-              :color1="sessionConfig.stage.scrollButtonColour">
-              </svg-icon>
+        <svg-icon
+          class=""
+          icon="accessiblityOn"
+          aria-hidden="true"
+          :color1="sessionConfig.stage.scrollButtonColour"
+        >
+        </svg-icon>
       </button>
 
-      <button style="padding: 0.5em" v-if="sessionConfig.editorOn === true" @click="setVisibleModal('assetData')">Show Asset Info</button>
-      <div v-if="sessionConfig.editorOn === true" class="xy-position">{{xPos}}%, {{yPos}}%
+      <button
+        style="padding: 0.5em"
+        v-if="sessionConfig.editorOn === true"
+        @click="setVisibleModal('assetData')"
+      >
+        Show Asset Info
+      </button>
+      <div v-if="sessionConfig.editorOn === true" class="xy-position">
+        {{ xPos }}%, {{ yPos }}%
       </div>
     </div>
 
-    <div id="container"
-         :class="{ 'drag-zone': sessionConfig.editorOn === true }"
-         :style="{ width: sessionConfig.stage.width, height: sessionConfig.stage.height, backgroundColor: sessionConfig.stage.backgroundColor }">
+    <div
+      id="container"
+      :class="{ 'drag-zone': sessionConfig.editorOn === true }"
+      :style="{
+        width: sessionConfig.stage.width,
+        height: sessionConfig.stage.height,
+        backgroundColor: sessionConfig.stage.backgroundColor,
+      }"
+    >
       <h1 class="sr-only">{{ sessionConfig.title }}</h1>
 
       <!-- background -->
-      <div v-if="sessionConfig.stageBackground && sessionConfig.stageBackground.id !== ''"
-              :id="sessionConfig.stageBackground.id"
-              class="stage-background"
-              @mousemove="mousemove"
-              @drop="onDrop($event)"
-              @dragover.prevent
-              @dragenter.prevent
-              :style="getStyle(sessionConfig.stageBackground)">
-          <img
-            :src="sessionConfig.stageBackground.src"
-            :alt="sessionConfig.stageBackground.altText"
-            draggable="false"
-            >
+      <div
+        v-if="
+          sessionConfig.stageBackground &&
+          sessionConfig.stageBackground.id !== ''
+        "
+        :id="sessionConfig.stageBackground.id"
+        class="stage-background"
+        @mousemove="mousemove"
+        @drop="onDrop($event)"
+        @dragover.prevent
+        @dragenter.prevent
+        :style="getStyle(sessionConfig.stageBackground)"
+      >
+        <img
+          :src="sessionConfig.stageBackground.src"
+          :alt="sessionConfig.stageBackground.altText"
+          draggable="false"
+        />
       </div>
 
       <!-- assets -->
       <template v-for="a in sessionConfig.assets" :key="a.id">
-        <asset-component v-if="!a.disabled"
-                         @on-move-left="onMoveLeft(a, smallMoveValue)"
-                         @on-large-move-left="onMoveLeft(a, largeMoveValue)"
-                         @on-move-right="onMoveRight(a, smallMoveValue)"
-                         @on-large-move-right="onMoveRight(a, largeMoveValue)"
-                         @on-move-up="onMoveUp(a, smallMoveValue)"
-                         @on-large-move-up="onMoveUp(a, largeMoveValue)"
-                         @on-move-down="onMoveDown(a, smallMoveValue)"
-                         @on-large-move-down="onMoveDown(a, largeMoveValue)"
-                         @on-minus="onDecreaseSize(a)"
-                         @on-plus="onIncreaseSize(a)"
-                         :asset="(a as StageAsset)"
-                         :editor-enabled="sessionConfig.editorOn"
-                         :indicator-colour="sessionConfig.stage.hotSpotIndicatorColour">
+        <asset-component
+          v-if="!a.disabled"
+          @on-move-left="onMoveLeft(a, smallMoveValue)"
+          @on-large-move-left="onMoveLeft(a, largeMoveValue)"
+          @on-move-right="onMoveRight(a, smallMoveValue)"
+          @on-large-move-right="onMoveRight(a, largeMoveValue)"
+          @on-move-up="onMoveUp(a, smallMoveValue)"
+          @on-large-move-up="onMoveUp(a, largeMoveValue)"
+          @on-move-down="onMoveDown(a, smallMoveValue)"
+          @on-large-move-down="onMoveDown(a, largeMoveValue)"
+          @on-minus="onDecreaseSize(a)"
+          @on-plus="onIncreaseSize(a)"
+          :asset="(a as StageAsset)"
+          :editor-enabled="sessionConfig.editorOn"
+          :indicator-colour="sessionConfig.stage.hotSpotIndicatorColour"
+        >
         </asset-component>
       </template>
-
     </div>
     <div v-if="sessionConfig.stage.scrollButtonsEnabled">
-
-      <button id="scrollButtonLeft" class="hide scroll-button rotate" @click="scrollStageLeft()" >
+      <button
+        id="scrollButtonLeft"
+        class="hide scroll-button rotate"
+        @click="scrollStageLeft()"
+      >
         <span class="sr-only">Scroll stage to the left</span>
         <svg-icon
-                  aria-hidden="true"
-                  class="rotate"
-                  icon="scrollArrow"
-                  :color1="sessionConfig.stage.scrollButtonStrokeColour"
-                  :color2="sessionConfig.stage.scrollButtonColour">
+          aria-hidden="true"
+          class="rotate"
+          icon="scrollArrow"
+          :color1="sessionConfig.stage.scrollButtonStrokeColour"
+          :color2="sessionConfig.stage.scrollButtonColour"
+        >
         </svg-icon>
       </button>
-      <button id="scrollButtonRight" class="hide scroll-button" @click="scrollStageRight()" >
+      <button
+        id="scrollButtonRight"
+        class="hide scroll-button"
+        @click="scrollStageRight()"
+      >
         <span class="sr-only">Scroll stage to the right</span>
         <svg-icon
-                  aria-hidden="true"
-                  icon="scrollArrow"
-                  :color1="sessionConfig.stage.scrollButtonStrokeColour"
-                  :color2="sessionConfig.stage.scrollButtonColour">
+          aria-hidden="true"
+          icon="scrollArrow"
+          :color1="sessionConfig.stage.scrollButtonStrokeColour"
+          :color2="sessionConfig.stage.scrollButtonColour"
+        >
         </svg-icon>
       </button>
-
     </div>
-    <footer :style="{ backgroundColor: sessionConfig.stage.footerColor, height: sessionConfig.stage.footerHeight }"></footer>
+    <footer
+      :style="{
+        backgroundColor: sessionConfig.stage.footerColor,
+        height: sessionConfig.stage.footerHeight,
+      }"
+    ></footer>
   </div>
 
   <transition name="slide">
     <modal-view v-if="visibleModal == 'assetData'" @close="setVisibleModal('')">
-      <template v-slot:header>
-        Asset Information
-      </template>
+      <template v-slot:header> Asset Information </template>
 
       <template v-slot:body>
-        <p>Here are the details for all the assets on the stage. <button @click="copyToClipboard()">Copy all to clipboard</button></p>
+        <p>
+          Here are the details for all the assets on the stage.
+          <button @click="copyToClipboard()">Copy all to clipboard</button>
+        </p>
         <table id="assetData">
           <thead>
             <tr>
@@ -159,7 +212,9 @@
               <td>{{ a.backgroundColor }}</td>
               <td>{{ a.linkIdentifier }}</td>
               <td>{{ a.timeline.tweens.length > 0 ? "Yes" : "No" }}</td>
-              <td><button @click="copyAssetGeometryToClipboard(a)">Copy</button></td>
+              <td>
+                <button @click="copyAssetGeometryToClipboard(a)">Copy</button>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -167,23 +222,24 @@
     </modal-view>
   </transition>
 
-   <transition name="slide">
-    <modal-view v-if="visibleModal == 'information'" @close="setVisibleModal('')">
+  <transition name="slide">
+    <modal-view
+      v-if="visibleModal == 'information'"
+      @close="setVisibleModal('')"
+    >
       <template v-slot:header>
         <div>
-        <h2>{{ sessionConfig.info.title }}</h2>
+          <h2>{{ sessionConfig.info.title }}</h2>
         </div>
       </template>
 
       <template v-slot:body>
         <div class="info-modal-contents">
-       <span v-html= "sessionConfig.info.text"></span>
+          <span v-html="sessionConfig.info.text"></span>
         </div>
-
       </template>
     </modal-view>
   </transition>
-
 </template>
 
 <script lang="ts">
@@ -206,9 +262,9 @@ export default defineComponent({
     ModalView,
     AssetComponent,
     SmallView,
-    SvgIcon
+    SvgIcon,
   },
-  data () {
+  data() {
     return {
       store: useStore(key),
       animationsExist: false,
@@ -226,10 +282,10 @@ export default defineComponent({
       "visibleModal",
       "animationsEnabled",
       "hotspotIndicatorsEnabled",
-      "stageLeftPosition"
-    ])
+      "stageLeftPosition",
+    ]),
   },
-  async mounted () {
+  async mounted() {
     await this.getViewModeCookie(); // determine stored view mode
 
     // create animations
@@ -268,7 +324,9 @@ export default defineComponent({
                 tl.from(element, anim);
                 break;
               default:
-                throw new Error("Unable to create tween.  Unrecognised tween type: " + tween);
+                throw new Error(
+                  "Unable to create tween.  Unrecognised tween type: " + tween
+                );
             }
           }
           this.animationsEnabled === true ? tl.play() : tl.pause();
@@ -281,117 +339,157 @@ export default defineComponent({
     const e = document.getElementById("container");
     if (e && this.stageLeftPosition && this.stageLeftPosition !== "") {
       e.style.marginLeft = this.stageLeftPosition;
-      const rightMostPosition = "-" + (parseInt(this.sessionConfig.stage.width, 10) - 100) + "%";
+      const rightMostPosition =
+        "-" + (parseInt(this.sessionConfig.stage.width, 10) - 100) + "%";
       if (this.stageLeftPosition === "0%") {
         gsap.set("#scrollButtonLeft", { display: "none", duration: 0 });
-      // } else if ((parseInt(this.stageLeftPosition, 10) * -1) >= parseInt(this.sessionConfig.stage.width, 10)) {
+        // } else if ((parseInt(this.stageLeftPosition, 10) * -1) >= parseInt(this.sessionConfig.stage.width, 10)) {
       } else if (this.stageLeftPosition === rightMostPosition) {
         gsap.set("#scrollButtonRight", { display: "none", duration: 0 });
       }
     }
   },
   methods: {
-    onMoveLeft (a: StageAsset, moveValue: number) {
-      let position = 0.00;
+    onMoveLeft(a: StageAsset, moveValue: number) {
+      let position = 0.0;
       position = parseFloat(a.left) - moveValue;
       a.left = position.toFixed(2) + "%";
     },
-    onMoveRight (a: StageAsset, moveValue: number) {
-      let position = 0.00;
+    onMoveRight(a: StageAsset, moveValue: number) {
+      let position = 0.0;
       position = parseFloat(a.left) + moveValue;
       a.left = position.toFixed(2) + "%";
     },
-    onMoveUp (a: StageAsset, moveValue: number) {
-      let position = 0.00;
+    onMoveUp(a: StageAsset, moveValue: number) {
+      let position = 0.0;
       position = parseFloat(a.top) - moveValue;
       a.top = position.toFixed(2) + "%";
     },
-    onMoveDown (a: StageAsset, moveValue: number) {
-      let position = 0.00;
+    onMoveDown(a: StageAsset, moveValue: number) {
+      let position = 0.0;
       position = parseFloat(a.top) + moveValue;
       a.top = position.toFixed(2) + "%";
     },
-    onIncreaseSize (a: StageAsset) {
-      let width = 0.00;
+    onIncreaseSize(a: StageAsset) {
+      let width = 0.0;
       if (a.width !== "auto") {
         width = parseFloat(a.width) + 0.1;
         a.width = width.toFixed(2) + "%";
       }
     },
-    onDecreaseSize (a: StageAsset) {
-      let width = 0.00;
+    onDecreaseSize(a: StageAsset) {
+      let width = 0.0;
       if (a.width !== "auto") {
         width = parseFloat(a.width) - 0.1;
         a.width = width.toFixed(2) + "%";
       }
     },
-    setSimpleViewMode () {
+    setSimpleViewMode() {
       this.store.dispatch("setViewMode", "smallOnly");
     },
-    toggleViewMode () {
+    toggleViewMode() {
       this.store.dispatch("toggleViewMode");
     },
-    async getViewModeCookie () {
+    async getViewModeCookie() {
       const viewMode = document.cookie
         .split("; ")
-        .find(row => row.startsWith("ViewMode="))
+        .find((row) => row.startsWith("ViewMode="))
         ?.split("=")[1];
 
       if (viewMode === "normal" || viewMode === "smallOnly") {
         this.store.dispatch("setViewMode", viewMode);
       }
     },
-    getIconColor1 (): string {
+    getIconColor1(): string {
       // return Utils.lightenDarkenColor(this.page.backgroundColour, -50);
       return "#fff";
     },
-    getIconColor2 (): string {
+    getIconColor2(): string {
       return "#e7a715"; // e7a715
     },
-    dispatchStagePos (leftPosition: string) {
+    dispatchStagePos(leftPosition: string) {
       this.store.dispatch("setStageLeftPosition", leftPosition);
     },
-    scrollStageLeft () {
+    scrollStageLeft() {
       const e = document.getElementById("container");
       if (e !== null) {
         const tl = gsap.timeline();
         tl.eventCallback("onComplete", this.dispatchStagePos, ["0%"]);
         // myAnimation.eventCallback("onComplete", myFunction, ["param1","param2"]);
         tl.to(e, { marginLeft: "0", duration: 1, ease: "power1.in" });
-        tl.to("#scrollButtonLeft", { opacity: 0, display: "none", duration: 0.3, ease: "power1.in" });
-        tl.to("#scrollButtonRight", { opacity: 1, duration: 0.3, ease: "power1.in", display: "block" });
+        tl.to("#scrollButtonLeft", {
+          opacity: 0,
+          display: "none",
+          duration: 0.3,
+          ease: "power1.in",
+        });
+        tl.to("#scrollButtonRight", {
+          opacity: 1,
+          duration: 0.3,
+          ease: "power1.in",
+          display: "block",
+        });
       }
     },
-    scrollStageRight () {
+    scrollStageRight() {
       const e = document.getElementById("container");
-      const marginLeftValue = "-" + (parseInt(this.sessionConfig.stage.width, 10) - 100) + "%";
+      const marginLeftValue =
+        "-" + (parseInt(this.sessionConfig.stage.width, 10) - 100) + "%";
       if (e !== null) {
         const tl = gsap.timeline();
-        tl.eventCallback("onComplete", this.dispatchStagePos, [marginLeftValue]);
-        tl.to(e, { marginLeft: marginLeftValue, duration: 1, ease: "power1.in" });
-        tl.to("#scrollButtonRight", { opacity: 0, display: "none", duration: 0.3, ease: "power1.in" });
-        tl.to("#scrollButtonLeft", { opacity: 1, duration: 0.3, ease: "power1.in", display: "block" });
+        tl.eventCallback("onComplete", this.dispatchStagePos, [
+          marginLeftValue,
+        ]);
+        tl.to(e, {
+          marginLeft: marginLeftValue,
+          duration: 1,
+          ease: "power1.in",
+        });
+        tl.to("#scrollButtonRight", {
+          opacity: 0,
+          display: "none",
+          duration: 0.3,
+          ease: "power1.in",
+        });
+        tl.to("#scrollButtonLeft", {
+          opacity: 1,
+          duration: 0.3,
+          ease: "power1.in",
+          display: "block",
+        });
       }
     },
-    getStyle (asset: StageBackground) {
-      const s = { width: asset.width, zIndex: asset.z, left: asset.left, top: asset.top };
+    getStyle(asset: StageBackground) {
+      const s = {
+        width: asset.width,
+        zIndex: asset.z,
+        left: asset.left,
+        top: asset.top,
+      };
       return s;
     },
-    copyToClipboard () {
-      let str = "Name, Left, Top, Scale, Z-index, Background colour, Hotspot page, Timeline";
+    copyToClipboard() {
+      let str =
+        "Name, Left, Top, Scale, Z-index, Background colour, Hotspot page, Timeline";
       this.sessionConfig.assets.forEach((a: StageAsset) => {
-        str = str + "\n" +
-              a.name + ", " +
-              a.left + ", " +
-              a.top + ", " +
-              a.width + ", " +
-              a.z + ", " +
-              a.backgroundColor;
+        str =
+          str +
+          "\n" +
+          a.name +
+          ", " +
+          a.left +
+          ", " +
+          a.top +
+          ", " +
+          a.width +
+          ", " +
+          a.z +
+          ", " +
+          a.backgroundColor;
 
         if (a.linkIdentifier && a.linkIdentifier !== null) {
           str = str + ", " + a.linkIdentifier;
-        }
-        else {
+        } else {
           str = str + ", ";
         }
 
@@ -404,12 +502,12 @@ export default defineComponent({
 
       navigator.clipboard.writeText(str);
     },
-    copyAssetGeometryToClipboard (a: StageAsset) {
+    copyAssetGeometryToClipboard(a: StageAsset) {
       const str = `${a.left}, ${a.top}, ${a.width}, ${a.z}`;
 
       navigator.clipboard.writeText(str);
     },
-    async stopStartAnimations () {
+    async stopStartAnimations() {
       await this.store.dispatch("toggleAnimations");
 
       this.timelines.forEach((x: gsap.core.Timeline) => {
@@ -421,30 +519,36 @@ export default defineComponent({
         }
       });
     },
-    async toggleHotspotIndicator () {
+    async toggleHotspotIndicator() {
       await this.store.dispatch("toggleHotspotIndicators");
     },
-    setVisibleModal (value: string): void {
+    setVisibleModal(value: string): void {
       this.store.dispatch("setVisibleModal", value);
     },
-    isDraggableAsset (asset: StageAsset) {
+    isDraggableAsset(asset: StageAsset) {
       if (asset.linkIdentifier !== "") {
         return true;
       }
       return false;
     },
-    startDrag (evt: any, asset: StageAsset) {
+    startDrag(evt: any, asset: StageAsset) {
       if (evt !== null && evt.dataTransfer !== null) {
         evt.dataTransfer.dropEffect = "move";
         evt.dataTransfer.effectAllowed = "move";
         evt.dataTransfer.setData("assetId", asset.id);
-        evt.dataTransfer.setDragImage(evt.target, evt.target.width / 2, evt.target.height / 2);
+        evt.dataTransfer.setDragImage(
+          evt.target,
+          evt.target.width / 2,
+          evt.target.height / 2
+        );
       }
     },
-    onDrop (evt: any) {
+    onDrop(evt: any) {
       if (evt !== null && evt.dataTransfer !== null) {
         const droppedAssetId = evt.dataTransfer.getData("assetId");
-        const a: StageAsset = this.sessionConfig.assets.find((x:StageAsset) => x.id === droppedAssetId);
+        const a: StageAsset = this.sessionConfig.assets.find(
+          (x: StageAsset) => x.id === droppedAssetId
+        );
         if (a != null) {
           const y = (evt.clientY / evt.target.height) * 100;
           const x = (evt.clientX / evt.target.width) * 100;
@@ -453,7 +557,7 @@ export default defineComponent({
         }
       }
     },
-    mousemove (event: any) {
+    mousemove(event: any) {
       event.stopPropagation();
       event.preventDefault();
       if (this.sessionConfig.editorOn === true) {
@@ -464,35 +568,47 @@ export default defineComponent({
         this.yPos = y.toFixed(2);
       }
     },
-    getXPos () {
+    getXPos() {
       const pos = Number(this.xPos) - 3;
       return pos.toString() + "%";
     },
-    getYPos () {
+    getYPos() {
       const pos = Number(this.yPos) - 5;
       return pos.toString() + "%";
-    }
-  }
+    },
+  },
 });
 </script>
 <style lang="scss">
+$controlButtonBackgroundColor: v-bind(
+  "sessionConfig.stage.controlButtonBackgroundColor"
+);
 
-$controlButtonBackgroundColor: v-bind('sessionConfig.stage.controlButtonBackgroundColor');
-$controlButtonTextColor: v-bind('sessionConfig.stage.controlButtonTextColor');
-$controlButtonRolloverBackgroundColor: v-bind('sessionConfig.stage.controlButtonRolloverBackgroundColor');
-$controlButtonRolloverTextColor: v-bind('sessionConfig.stage.controlButtonRolloverTextColor');
-$controlButtonBorderColor: v-bind('sessionConfig.stage.controlButtonBorderColor');
-$controlButtonBorderWidth: v-bind('sessionConfig.stage.controlButtonBorderWidth');
+$controlButtonTextColor: v-bind("sessionConfig.stage.controlButtonTextColor");
+
+$controlButtonRolloverBackgroundColor: v-bind(
+  "sessionConfig.stage.controlButtonRolloverBackgroundColor"
+);
+
+$controlButtonRolloverTextColor: v-bind(
+  "sessionConfig.stage.controlButtonRolloverTextColor"
+);
+
+$controlButtonBorderColor: v-bind(
+  "sessionConfig.stage.controlButtonBorderColor"
+);
+
+$controlButtonBorderWidth: v-bind(
+  "sessionConfig.stage.controlButtonBorderWidth"
+);
 
 // 1024px
 @media only screen and (min-width: 1024px) {
-
   #containerWrapper {
     position: relative;
     padding-bottom: 56.25%;
     height: 0;
     overflow: hidden;
-
   }
 
   #container {
@@ -510,7 +626,8 @@ $controlButtonBorderWidth: v-bind('sessionConfig.stage.controlButtonBorderWidth'
     width: 140px;
   }
 
-  .stage-background, .asset-image {
+  .stage-background,
+  .asset-image {
     position: absolute;
 
     img {
@@ -553,15 +670,12 @@ $controlButtonBorderWidth: v-bind('sessionConfig.stage.controlButtonBorderWidth'
 
     &:focus {
       svg {
-
       }
     }
 
     svg {
       outline: $keyboard-focus-width $keyboard-focus-style $keyboard-focus-color;
-
     }
-
   }
 
   .stage-control-panel {
@@ -575,34 +689,34 @@ $controlButtonBorderWidth: v-bind('sessionConfig.stage.controlButtonBorderWidth'
     position: relative;
 
     .controlBtn {
-      background-color:#fff;
-      border-radius:5px;
-      padding:1rem;
+      background-color: #fff;
+      border-radius: 5px;
+      padding: 1rem;
     }
-
   }
 
-
+  .info-modal-contents {
+    padding-right: 1rem;
+    overflow-y: hidden;
+  }
 
   .info-modal-contents a {
     text-decoration: underline;
   }
-
 }
 
 .stage-control-panel {
-    .controlBtn {
-        background-color: $controlButtonBackgroundColor;
-        color: $controlButtonTextColor;
-        border-style: solid;
-        border-width: $controlButtonBorderWidth;
-        border-color: $controlButtonBorderColor;
-      }
-
-    .hide.controlBtn:hover {
-        background-color: $controlButtonRolloverBackgroundColor;
-        color: $controlButtonRolloverTextColor;
-      }
+  .controlBtn {
+    background-color: $controlButtonBackgroundColor;
+    color: $controlButtonTextColor;
+    border-style: solid;
+    border-width: $controlButtonBorderWidth;
+    border-color: $controlButtonBorderColor;
   }
 
+  .hide.controlBtn:hover {
+    background-color: $controlButtonRolloverBackgroundColor;
+    color: $controlButtonRolloverTextColor;
+  }
+}
 </style>

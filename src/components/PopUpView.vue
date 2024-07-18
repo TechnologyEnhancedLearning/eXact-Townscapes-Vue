@@ -1,76 +1,128 @@
 <template>
   <div class="modal" id="popUpViewModal">
-    <div class="modal__wrapper"
-    @keydown.esc="close()"
-    @keydown.tab.exact="(event) => overviewTab(event)">
+    <div
+      class="modal__wrapper"
+      @keydown.esc="close()"
+      @keydown.tab.exact="(event) => overviewTab(event)"
+    >
       <div class="modal__container" role="dialog">
-      <header class="modal__header">
-            <div>
-              <h2 class="text">{{ link.text }}</h2>
-              <p v-if="link.text !== 'Overview'" class="instructional-text">Select an item below for further guidance</p>
-            </div>
-            <button id="closeModal" class="hide" @click="close()" @keydown.shift.tab.capture.prevent.stop>
-              <svg-icon class="icon close spin" icon="close" color1="#000" color2="#fff" color3="#000"></svg-icon>
-            </button>
-      </header>
-      <div class="modal__body">
-        <div  v-if="link.links.length == 1 && link.links[0].isOverviewLink"
-              class="is-overview" v-html="overviewText"
-              :style="{ backgroundColor: backgroundColor }">
-
-        </div>
-        <ul v-else>
-          <li v-for="(l, index) in link.links" :key="index"
-              class="nonAccordionLi gsap-slide" :class="{'has-accordion': isAccordion(l), 'open': isAccordionOpen(l.id), 'last-link': index == (link.links.length - 1)}"
+        <header class="modal__header">
+          <div>
+            <h2 class="text">{{ link.text }}</h2>
+            <p v-if="link.text !== 'Overview'" class="instructional-text">
+              Select an item below for further guidance
+            </p>
+          </div>
+          <button
+            id="closeModal"
+            class="hide"
+            @click="close()"
+            @keydown.shift.tab.capture.prevent.stop
+          >
+            <svg-icon
+              class="icon close spin"
+              icon="close"
+              color1="#000"
+              color2="#fff"
+              color3="#000"
+            ></svg-icon>
+          </button>
+        </header>
+        <div class="modal__body">
+          <div
+            v-if="link.links.length == 1 && link.links[0].isOverviewLink"
+            class="is-overview"
+            v-html="overviewText"
+            :style="{ backgroundColor: backgroundColor }"
+          ></div>
+          <ul v-else>
+            <li
+              v-for="(l, index) in link.links"
+              :key="index"
+              class="nonAccordionLi gsap-slide"
+              :class="{
+                'has-accordion': isAccordion(l),
+                open: isAccordionOpen(l.id),
+                'last-link': index == link.links.length - 1,
+              }"
               @mouseenter="enterLI"
               @mouseleave="leaveLI"
-              @keydown.tab.exact="(event) => checkIfLastLink(event, index == (link.links.length - 1), l)">
+              @keydown.tab.exact="
+                (event) =>
+                  checkIfLastLink(event, index == link.links.length - 1, l)
+              "
+            >
+              <span
+                class="linkText"
+                v-if="!isAccordion(l)"
+                v-html="l.text"
+                :style="{ backgroundColor: backgroundColor }"
+              ></span>
 
-            <span class="linkText" v-if="!isAccordion(l)" v-html="l.text" :style="{ backgroundColor: backgroundColor }"></span>
-
-            <div v-if="isAccordion(l)">
-              <label class="linkText"
-                      tabindex="0"
-                      @keyup.enter="toggleAccordion(l.id)"
-                      @keyup.space="toggleAccordion(l.id)"
-                      :style="{ backgroundColor: backgroundColor }">
-                <span v-html="l.text"></span>
-                <input type="checkbox" :value="l.id" v-model="openAccordions" class="hide" >
-              </label>
-
-              <transition-group tag="ul"
-                                :css="false"
-                                @enter="slideIn"
-                                @leave="slideOut"
-                                style="background-color: transparent;"
-                                class="accordion"
-                                :class="{'open': isAccordionOpen(l.id)}">
-
-                    <li v-show="isAccordionOpen(l.id)"
-                        class="accordionLi"
-                        :class="{'last-link': index == (link.links.length - 1) && accIndex == (l.links.length - 1)}"
-                        v-for="(accLink, accIndex) in l.links"
-                        :key="accIndex"
-                        :data-index="accIndex"
-                        @mouseenter="enterAccordionLI"
-                        @mouseleave="leaveLI"
-                        @keydown.tab.exact="(event) => checkIfLastLink(event, index == (link.links.length - 1) && accIndex == (l.links.length - 1), accLink)"
+              <div v-if="isAccordion(l)">
+                <label
+                  class="linkText"
+                  tabindex="0"
+                  @keyup.enter="toggleAccordion(l.id)"
+                  @keyup.space="toggleAccordion(l.id)"
+                  :style="{ backgroundColor: backgroundColor }"
                 >
-                      <span class="linkText" :style="{ backgroundColor: lighten() }" v-html="accLink.text"></span>
-                    </li>
+                  <span v-html="l.text"></span>
+                  <input
+                    type="checkbox"
+                    :value="l.id"
+                    v-model="openAccordions"
+                    class="hide"
+                  />
+                </label>
 
-              </transition-group>
-            </div>
-          </li>
-        </ul>
-      </div>
+                <transition-group
+                  tag="ul"
+                  :css="false"
+                  @enter="slideIn"
+                  @leave="slideOut"
+                  style="background-color: transparent"
+                  class="accordion"
+                  :class="{ open: isAccordionOpen(l.id) }"
+                >
+                  <li
+                    v-show="isAccordionOpen(l.id)"
+                    class="accordionLi"
+                    :class="{
+                      'last-link':
+                        index == link.links.length - 1 &&
+                        accIndex == l.links.length - 1,
+                    }"
+                    v-for="(accLink, accIndex) in l.links"
+                    :key="accIndex"
+                    :data-index="accIndex"
+                    @mouseenter="enterAccordionLI"
+                    @mouseleave="leaveLI"
+                    @keydown.tab.exact="
+                      (event) =>
+                        checkIfLastLink(
+                          event,
+                          index == link.links.length - 1 &&
+                            accIndex == l.links.length - 1,
+                          accLink
+                        )
+                    "
+                  >
+                    <span
+                      class="linkText"
+                      :style="{ backgroundColor: lighten() }"
+                      v-html="accLink.text"
+                    ></span>
+                  </li>
+                </transition-group>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <transition name="fade">
-      <div
-        class="screen-mask"
-        @click="close()"
-      ></div>
+      <div class="screen-mask" @click="close()"></div>
     </transition>
   </div>
 </template>
@@ -87,35 +139,32 @@ export default defineComponent({
   name: "PopUpView",
   emits: ["close"],
   components: {
-    SvgIcon
+    SvgIcon,
   },
   props: {
     link: {
       type: Link,
-      default: new Link()
+      default: new Link(),
     },
     backgroundColor: {
       type: String,
-      default: "#fff"
-    }
+      default: "#fff",
+    },
   },
-  data () {
+  data() {
     return {
       store: useStore(key),
       animsHaveRun: false,
       openAccordions: new Array<string>(),
       backToClose: false,
       overviewText: "",
-      linksNumber: 0
+      linksNumber: 0,
     };
   },
   computed: {
-    ...mapState([
-      "sessionConfig"
-    ])
-
+    ...mapState(["sessionConfig"]),
   },
-  async mounted () {
+  async mounted() {
     this.playOpeningAnims();
 
     const closeBtn = document.getElementById("closeModal");
@@ -135,7 +184,7 @@ export default defineComponent({
 
       const anchors = div.getElementsByTagName("a");
       if (anchors && anchors.length > 0) {
-        const lastAnchor = anchors[(anchors.length - 1)];
+        const lastAnchor = anchors[anchors.length - 1];
         lastAnchor.classList.add("last-link");
       }
 
@@ -143,42 +192,48 @@ export default defineComponent({
     }
   },
   // GSAP animation won't run on load in the mounted event so have had to put it in updated but add a flag to stop it repeating
-  async updated () {
+  async updated() {
     this.playOpeningAnims();
   },
   methods: {
-    slideIn (el: any, done: any) {
+    slideIn(el: any, done: any) {
       gsap.set(el, {
         opacity: 0,
-        height: 0
+        height: 0,
       });
       gsap.to(el, {
         opacity: 1,
         height: "auto",
         duration: 0.8,
         delay: el.dataset.index * 0.25,
-        onComplete: done
+        onComplete: done,
       });
     },
-    slideOut (el: any, done: any) {
+    slideOut(el: any, done: any) {
       gsap.to(el, {
         opacity: 0,
         height: 0,
         duration: 0.8,
         delay: el.dataset.index * 0.25,
-        onComplete: done
+        onComplete: done,
       });
     },
-    isAccordionOpen (accordionId: string) {
-      const found = this.openAccordions.find((x:string) => x === accordionId);
+    isAccordionOpen(accordionId: string) {
+      const found = this.openAccordions.find((x: string) => x === accordionId);
       if (found) {
         return true;
       }
 
       return false;
     },
-    overviewTab (event: KeyboardEvent) {
-      if (event.type.toLowerCase() === "keydown" && event.key.toLowerCase() === "tab" && !event.altKey && !event.shiftKey && !event.ctrlKey) {
+    overviewTab(event: KeyboardEvent) {
+      if (
+        event.type.toLowerCase() === "keydown" &&
+        event.key.toLowerCase() === "tab" &&
+        !event.altKey &&
+        !event.shiftKey &&
+        !event.ctrlKey
+      ) {
         if (event.target) {
           const target = event.target as HTMLAnchorElement;
           if (target.classList.contains("last-link") || this.linksNumber < 1) {
@@ -190,13 +245,14 @@ export default defineComponent({
         }
       }
     },
-    checkIfLastLink (event: Event, isLastLinkInList: boolean, link: Link) {
+    checkIfLastLink(event: Event, isLastLinkInList: boolean, link: Link) {
       // if this is the last link in the list of links in a parent list, or the list of links in a child accordion
       if (isLastLinkInList) {
         // if the link id is in the open accordion collection, don't skip to closeModal, let
         // the tab action go through the list of child accordion items
         const index = this.openAccordions.indexOf(link.id, 0);
-        if (index === -1 && link.isOverviewLink === false) { // if this link is not an open accordion, skip to closeModal
+        if (index === -1 && link.isOverviewLink === false) {
+          // if this link is not an open accordion, skip to closeModal
           event.preventDefault(); // you must stop the event, otherwise the focus will move beyond the close button
           event.stopPropagation();
           const closeBtn = document.getElementById("closeModal");
@@ -204,13 +260,13 @@ export default defineComponent({
         }
       }
     },
-    isAccordion (l: Link) {
+    isAccordion(l: Link) {
       return l.links.length > 0;
     },
-    lighten () {
+    lighten() {
       return this.newShade(this.backgroundColor, 30);
     },
-    toggleAccordion (accordionId: string) {
+    toggleAccordion(accordionId: string) {
       const index = this.openAccordions.indexOf(accordionId, 0);
       if (index > -1) {
         this.openAccordions.splice(index, 1);
@@ -218,29 +274,33 @@ export default defineComponent({
         this.openAccordions.push(accordionId);
       }
     },
-    close () {
+    close() {
       this.$emit("close");
     },
-    enterLI (e: Event) {
+    enterLI(e: Event) {
       // gsap.to("li:not(.accordion>li)", { opacity: 0.6, duration: 0.5 });
-      gsap.to(".nonAccordionLi", { opacity: 0.7, duration: 0.2 });
+      gsap.to(".nonAccordionLi", { duration: 0.2 });
       gsap.to(e.target, { opacity: 1, duration: 0.2 });
     },
-    enterAccordionLI (e: Event) {
-      gsap.to(".accordionLi", { opacity: 0.7, duration: 0.2 });
+    enterAccordionLI(e: Event) {
+      gsap.to(".accordionLi", { duration: 0.2 });
       gsap.to(e.target, { opacity: 1, duration: 0.2 });
     },
-    leaveLI (e: Event) {
+    leaveLI(e: Event) {
       // gsap.to(".gsapSlide", { opacity: 1, duration: 0.5 });
       gsap.to("li", { opacity: 1, duration: 0.2 });
     },
-    playOpeningAnims () {
+    playOpeningAnims() {
       if (this.animsHaveRun === false) {
         const tl = gsap.timeline({ paused: true });
 
         const modalHeaderTL = gsap.timeline();
         modalHeaderTL.set(".modal__header", { opacity: 0 });
-        modalHeaderTL.to(".modal__header", { opacity: 1, ease: "power2.out", duration: 0.5 });
+        modalHeaderTL.to(".modal__header", {
+          opacity: 1,
+          ease: "power2.out",
+          duration: 0.5,
+        });
         tl.add(modalHeaderTL);
 
         const arr = document.querySelectorAll(".gsap-slide");
@@ -249,13 +309,13 @@ export default defineComponent({
           opacity: "0",
           padding: "0",
           duration: 0.8,
-          stagger: 0.1
+          stagger: 0.1,
         });
         tl.play();
         this.animsHaveRun = true;
       }
     },
-    newShade (hexColor: string, magnitude: number) {
+    newShade(hexColor: string, magnitude: number) {
       hexColor = hexColor.replace("#", "");
       if (hexColor.length === 6) {
         const decimalColor = parseInt(hexColor, 16);
@@ -272,13 +332,11 @@ export default defineComponent({
       } else {
         return hexColor;
       }
-    }
-
-  }
+    },
+  },
 });
 </script>
 <style lang="scss">
-
 .modal {
   position: fixed;
   z-index: 1000;
@@ -302,7 +360,7 @@ export default defineComponent({
   justify-content: center; /*centers items on the line (the x-axis by default)*/
   align-items: center; /*centers items on the cross-axis (y by default)*/
 
-  height:100%;
+  height: 100%;
 }
 
 .modal__container {
@@ -311,18 +369,18 @@ export default defineComponent({
   margin: 0px auto;
   background: transparent;
   overflow-x: auto;
-
+  overflow-y: hidden;
 
   //&.small {
-    //width: 25%;
-    //height: 90%;
+  //width: 25%;
+  //height: 90%;
   //}
 
   //&.large {
-    //width: 96vw;
-    //height: 96vh;
+  //width: 96vw;
+  //height: 96vh;
   //}
-  height:100%;
+  height: 100%;
 }
 
 .modal__header {
@@ -331,7 +389,7 @@ export default defineComponent({
   margin-bottom: 0.3em;
   display: flex;
   color: #fff;
-  background-color:#000;
+  background-color: #000;
   font-weight: 600;
 
   justify-content: space-between;
@@ -344,7 +402,8 @@ export default defineComponent({
     display: block;
   }
 
-  p, h2 {
+  p,
+  h2 {
     text-align: left;
     margin: 0;
     padding: 0;
@@ -355,10 +414,9 @@ export default defineComponent({
     margin-bottom: 8px;
   }
 
-   p {
+  p {
     font-size: 1em;
-   }
-
+  }
 }
 
 .modal__body {
@@ -395,7 +453,7 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   background-color: rgba(255, 255, 255, 1);
-  opacity: 0.5;
+  opacity: 0.8;
 }
 
 .linkText {
@@ -403,12 +461,11 @@ export default defineComponent({
   padding: 0.8em;
 
   a {
-    text-decoration:underline;
+    text-decoration: underline;
   }
 }
 
 li.has-accordion {
-
   ul {
     padding: 0;
     margin: 0;
@@ -422,26 +479,26 @@ li.has-accordion {
       margin-bottom: 0.2em;
     }
   }
-  &>div>label {
+  & > div > label {
     cursor: pointer;
   }
-  &>div>label::after {
-      content: '\276F';
-      transform: rotate(90deg);
-      font-size: 1.5vw;
-      margin-top: -0.4vw;
-      display: block;
-      float: right;
-      transition: transform 0.5s;
+  & > div > label::after {
+    content: "\276F";
+    transform: rotate(90deg);
+    font-size: 1.5vw;
+    margin-top: -0.4vw;
+    display: block;
+    float: right;
+    transition: transform 0.5s;
   }
   &.open {
-    &>div>label::after {
+    & > div > label::after {
       transform: rotate(270deg);
     }
   }
 }
 
-label>input {
+label > input {
   display: none;
 }
 
@@ -457,17 +514,16 @@ label>input {
 }
 
 #closeModal {
-  outline:none;
+  outline: none;
   &:focus-visible {
-
     svg {
-      outline: $keyboard-focus-width $keyboard-focus-style $keyboard-focus-color-inverted;
+      outline: $keyboard-focus-width $keyboard-focus-style
+        $keyboard-focus-color-inverted;
     }
   }
 
   svg {
     width: 2.5vw;
-
   }
 }
 

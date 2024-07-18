@@ -1,8 +1,9 @@
 <template>
   <div class="modal">
-    <div class="modal__wrapper"
-    @keydown.esc="close()"
-    @keydown.tab.exact="(event) => overviewTab(event)"
+    <div
+      class="modal__wrapper"
+      @keydown.esc="close()"
+      @keydown.tab.exact="(event) => overviewTab(event)"
     >
       <div
         :class="['modal__container', modalSize]"
@@ -12,20 +13,27 @@
       >
         <header class="modal__header" id="modalTitle">
           <slot name="header"> </slot>
-         <button id="closeModal" class="hide" 
-         @click="close()"
-         @keydown.shift.tab.capture.prevent.stop>
-              <svg-icon class="icon close spin" icon="close" color1="#000" color2="#fff" color3="#000"></svg-icon>
-            </button>
+          <button
+            id="closeModal"
+            class="hide"
+            @click="close()"
+            @keydown.shift.tab.capture.prevent.stop
+          >
+            <svg-icon
+              class="icon close spin"
+              icon="close"
+              color1="#000"
+              color2="#fff"
+              color3="#000"
+            ></svg-icon>
+          </button>
         </header>
 
         <div class="modal__body" id="modalDescription">
           <slot name="body"> </slot>
         </div>
         <div class="modal__footer">
-          <slot name="footer">
-
-          </slot>
+          <slot name="footer"> </slot>
         </div>
       </div>
     </div>
@@ -40,38 +48,44 @@ export default defineComponent({
   name: "ModalView",
   emits: ["close"],
   components: {
-    SvgIcon
+    SvgIcon,
   },
   props: {
     modalSize: {
       type: String,
-      default: "large"
-    }
+      default: "large",
+    },
   },
   computed: {
-    ...mapState([
-      "sessionConfig"
-    ])
+    ...mapState(["sessionConfig"]),
   },
-  async mounted () {
+  async mounted() {
     const closeBtn = document.getElementById("closeModal");
     closeBtn?.focus();
   },
   methods: {
-    close () {
+    close() {
       this.$emit("close");
     },
-    overviewTab (event: KeyboardEvent) {
+    overviewTab(event: KeyboardEvent) {
       // A workaround: I create an HTML element to inject the INFO html in.
       // Secondly I interact with it as if it was in the DOM to get access to the html elements in it contained
       const htmlElement = document.createElement("div");
       htmlElement.innerHTML = this.sessionConfig.info.text;
 
       const linksList = htmlElement.querySelectorAll<HTMLElement>("a");
-      const secondLast = linksList[linksList.length -1];
-      const isLastLink = secondLast.isEqualNode(event.target as HTMLAnchorElement);
-      
-      if (event.type.toLowerCase() === "keydown" && event.key.toLowerCase() === "tab" && !event.altKey && !event.shiftKey && !event.ctrlKey) {
+      const secondLast = linksList[linksList.length - 1];
+      const isLastLink = secondLast.isEqualNode(
+        event.target as HTMLAnchorElement
+      );
+
+      if (
+        event.type.toLowerCase() === "keydown" &&
+        event.key.toLowerCase() === "tab" &&
+        !event.altKey &&
+        !event.shiftKey &&
+        !event.ctrlKey
+      ) {
         if (event.target) {
           if (isLastLink || linksList.length < 1) {
             event.preventDefault(); // you must stop the event, otherwise the focus will move beyond the close button
@@ -81,8 +95,8 @@ export default defineComponent({
           }
         }
       }
-    }
-  }
+    },
+  },
 });
 </script>
 
@@ -178,17 +192,16 @@ export default defineComponent({
 }
 
 #closeModal {
-  outline:none;
+  outline: none;
   &:focus-visible {
-
     svg {
-      outline: $keyboard-focus-width $keyboard-focus-style $keyboard-focus-color-inverted;
+      outline: $keyboard-focus-width $keyboard-focus-style
+        $keyboard-focus-color-inverted;
     }
   }
 
   svg {
     width: 2.5vw;
-
   }
 }
 </style>
